@@ -12,6 +12,8 @@ import Box from '@mui/material/Box'
 import Avatar from '@mui/material/Avatar'
 import { Link } from 'react-router-dom'
 import { useTheme } from '@mui/material/styles'
+import { profiles } from '../constants/profiles'
+// import { ReactComponent as XIcon } from '../assets/icons/X.svg'
 
 // Category type ids:
 const STUDY_BUDDY_ID = 1;
@@ -20,30 +22,6 @@ const COFOUNDER_ID = 2;
 const categories = [
     { id: STUDY_BUDDY_ID, label: 'Study buddy' },
     { id: COFOUNDER_ID, label: 'Cofounder' },
-]
-
-// TODO: Create actual storage for profiles
-const profiles = [
-    {
-        name: 'Aika Aldayarova',
-        pronouns: 'she/her',
-        house: 'Eliot',
-        year: '2024',
-        concentration: 'Computer Science',
-        studyBuddyInterests: ['Science', 'CS 178'],
-        cofounderInterests: ['Food', 'Science'],
-        cofounderSkills: ['Robotics'],
-    },
-    {
-        name: 'Olivia Wenzel',
-        pronouns: 'she/her',
-        house: 'Eliot',
-        year: '2024',
-        concentration: 'Computer Science',
-        studyBuddyInterests: ['Science', 'CS 178'],
-        cofounderInterests: ['Food', 'Science'],
-        cofounderSkills: ['Robotics'],
-    },
 ]
 
 function SearchPage() {
@@ -140,7 +118,17 @@ function SearchPage() {
                     return (
                         <Grid item key={index}>
                             <Chip
+                                sx={{ 
+                                    backgroundColor: theme.palette.customColors.info.bg, 
+                                    border: `1px solid ${theme.palette.customColors.info.hover}`, 
+                                    borderRadius: "50px", 
+                                    color: theme.palette.customColors.info.hover, 
+                                    "& .MuiChip-deleteIcon": {
+                                        color: theme.palette.customColors.info.hover,
+                                    },
+                                }}
                                 label={query}
+                                // deleteIcon={<XIcon style={{ fontSize: "0.5rem", color: theme.palette.customColors.info.hover, }} />}
                                 onDelete={() => {
                                     setStudyBuddyQueries(studyBuddyQueries.filter((q) => !(q.name === query.name && q.categoryId === query.categoryId)))
                                 }}
@@ -152,6 +140,15 @@ function SearchPage() {
                     return (
                         <Grid item key={index}>
                             <Chip
+                                sx={{ 
+                                    backgroundColor: theme.palette.customColors.primary.bg, 
+                                    border: `1px solid ${theme.palette.customColors.primary.hover}`, 
+                                    borderRadius: "50px", 
+                                    color: theme.palette.customColors.primary.hover, 
+                                    "& .MuiChip-deleteIcon": {
+                                        color: theme.palette.customColors.primary.hover,
+                                    },
+                                }}
                                 label={query}
                                 onDelete={() => {
                                     setCofounderInterestQueries(cofounderInterestQueries.filter((q) => !(q.name === query.name && q.categoryId === query.categoryId)))
@@ -164,6 +161,15 @@ function SearchPage() {
                     return (
                         <Grid item key={index}>
                             <Chip
+                                sx={{ 
+                                    backgroundColor: theme.palette.customColors.warning.bg, 
+                                    border: `1px solid ${theme.palette.customColors.warning.border}`, 
+                                    borderRadius: "50px", 
+                                    color: theme.palette.customColors.warning.border, 
+                                    "& .MuiChip-deleteIcon": {
+                                        color: theme.palette.customColors.warning.border,
+                                    },
+                                }}
                                 label={query}
                                 onDelete={() => {
                                     setCofounderSkillQueries(cofounderSkillQueries.filter((q) => !(q.name === query.name && q.categoryId === query.categoryId)))
@@ -184,10 +190,25 @@ function SearchPage() {
                 <Grid item>
                     <TextField 
                       variant="outlined"
-                      sx={{ backgroundColor: theme.palette.info.bg }}
+                      sx={{ 
+                        backgroundColor: theme.palette.customColors.info.bg, 
+                        "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": {
+                            borderColor: theme.palette.customColors.info.hover,
+                        },
+                        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                          borderColor: theme.palette.customColors.info.hover,
+                        },
+                        // "& .MuiSvgIcon-root.MuiIconButton-root:hover": {
+                        //     color: theme.palette.customColors.info.hover,
+                        // },
+                        //   "& .MuiSvgIcon-root.MuiIconButton-root:active": {
+                        //     color: theme.palette.customColors.info.hover,
+                        // }
+                      }}
                       InputProps={{
-                        startAdornment: (
+                        endAdornment: (
                             <InputAdornment position="start">
+                                {/* sx={{ "&:hover": { color: theme.palette.customColors.info.hover }, "&:active": { color: theme.palette.customColors.info.hover } }} */}
                                 <Search />
                             </InputAdornment>
                         )
@@ -226,6 +247,15 @@ function SearchPage() {
                 <Grid item>
                     <TextField 
                       variant="outlined"
+                      sx={{ 
+                        backgroundColor: theme.palette.customColors.primary.bg, 
+                        "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": {
+                            borderColor: theme.palette.customColors.primary.hover,
+                        },
+                        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                          borderColor: theme.palette.customColors.primary.hover,
+                        },
+                      }}
                       InputProps={{
                         startAdornment: (
                             <InputAdornment position="start">
@@ -263,6 +293,15 @@ function SearchPage() {
                 <Grid item>
                     <TextField 
                       variant="outlined"
+                      sx={{ 
+                        backgroundColor: theme.palette.customColors.warning.bg, 
+                        "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": {
+                            borderColor: theme.palette.customColors.warning.hover,
+                        },
+                        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                          borderColor: theme.palette.customColors.warning.hover,
+                        },
+                      }}
                       InputProps={{
                         startAdornment: (
                             <InputAdornment position="start">
