@@ -11,6 +11,7 @@ import CardContent from '@mui/material/CardContent'
 import Box from '@mui/material/Box'
 import Avatar from '@mui/material/Avatar'
 import { Link } from 'react-router-dom'
+import { useTheme } from '@mui/material/styles'
 
 // Category type ids:
 const STUDY_BUDDY_ID = 1;
@@ -55,6 +56,8 @@ function SearchPage() {
     const [studyBuddyQueries, setStudyBuddyQueries] = useState([])
     const [cofounderInterestQueries, setCofounderInterestQueries] = useState([])
     const [cofounderSkillQueries, setCofounderSkillQueries] = useState([])
+
+    const theme = useTheme();
 
     // This computes on every render, which is very inefficient.
     // TODO: Consider when/how to compute more efficiently...
@@ -181,6 +184,7 @@ function SearchPage() {
                 <Grid item>
                     <TextField 
                       variant="outlined"
+                      sx={{ backgroundColor: theme.palette.info.bg }}
                       InputProps={{
                         startAdornment: (
                             <InputAdornment position="start">
