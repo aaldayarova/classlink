@@ -130,7 +130,7 @@ function SearchPage() {
                                 label={query}
                                 // deleteIcon={<XIcon style={{ fontSize: "0.5rem", color: theme.palette.customColors.info.hover, }} />}
                                 onDelete={() => {
-                                    setStudyBuddyQueries(studyBuddyQueries.filter((q) => !(q.name === query.name && q.categoryId === query.categoryId)))
+                                    setStudyBuddyQueries(studyBuddyQueries.filter((q) => q !== query))
                                 }}
                             />
                         </Grid>
@@ -151,7 +151,7 @@ function SearchPage() {
                                 }}
                                 label={query}
                                 onDelete={() => {
-                                    setCofounderInterestQueries(cofounderInterestQueries.filter((q) => !(q.name === query.name && q.categoryId === query.categoryId)))
+                                    setCofounderInterestQueries(cofounderInterestQueries.filter((q) => q !== query))
                                 }}
                             />
                         </Grid>
@@ -172,7 +172,7 @@ function SearchPage() {
                                 }}
                                 label={query}
                                 onDelete={() => {
-                                    setCofounderSkillQueries(cofounderSkillQueries.filter((q) => !(q.name === query.name && q.categoryId === query.categoryId)))
+                                    setCofounderSkillQueries(cofounderSkillQueries.filter((q) => q !== query))
                                 }}
                             />
                         </Grid>
