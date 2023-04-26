@@ -95,12 +95,14 @@ function SearchPage() {
                     </Link>
                 </Grid>
             </Grid>
-            <Grid container spacing={2}>
+            {/* justifyContent={'center'} */}
+            <Grid container spacing={2} >
                 <Grid item>
-                    <Typography variant="h3">"I want to search for a </Typography>
+                    <Typography variant="h4">"I want to search for a </Typography>
                 </Grid>
                 <Grid item>
                     <Autocomplete
+                      size={'small'}
                       defaultValue={null}
                       isOptionEqualToValue={(option, value) => option.id === value.id && option.name === value.name}
                       value={selectedCategory || null}
@@ -127,10 +129,10 @@ function SearchPage() {
                     />
                 </Grid>
                 <Grid item>
-                    <Typography variant="h3"> ..."</Typography>
+                    <Typography variant="h4"> "</Typography>
                 </Grid>
             </Grid>
-            {selectedCategory && <Grid container spacing={1}>
+            {selectedCategory && <Grid container spacing={1} sx={{ paddingTop: '10px' }}>
                 {selectedCategory.id == STUDY_BUDDY_ID && studyBuddyQueries.map((query, index) => {
                     return (
                         <Grid item key={index}>
@@ -170,7 +172,7 @@ function SearchPage() {
             </Grid>}
             {selectedCategory && selectedCategory.id == STUDY_BUDDY_ID &&
             <>
-            <Grid container>
+            <Grid container sx={{ paddingTop: '10px', paddingBottom: '8px' }}>
                 <Grid item>
                     <Typography variant="h6">To work on...</Typography>
                 </Grid>
@@ -211,12 +213,12 @@ function SearchPage() {
             }
             {selectedCategory && selectedCategory.id == COFOUNDER_ID &&
             <>
-            <Grid container>
+            <Grid container sx={{ paddingBottom: '8px' }}>
                 <Grid item>
                     <Typography variant="h6">Who is interested in...</Typography>
                 </Grid>
             </Grid>
-            <Grid container>
+            <Grid container sx={{ paddingBottom: '10px' }}>
                 <Grid item>
                     <TextField 
                       variant="outlined"
@@ -248,7 +250,7 @@ function SearchPage() {
                     />
                 </Grid>
             </Grid>
-            <Grid container>
+            <Grid container sx={{ paddingBottom: '8px' }}>
                 <Grid item>
                     <Typography variant="h6">Who is skilled in...</Typography>
                 </Grid>
@@ -287,18 +289,20 @@ function SearchPage() {
             </Grid>
             </>
             }
-            <hr />
             {(studyBuddyQueries.length > 0 || cofounderSkillQueries.length > 0 || cofounderInterestQueries.length > 0) && 
             <>
-                <Box sx={{ display: 'inline-block', transform: 'scale(0.8)' }}>
-                    <Card>
-                        <CardContent>
+                {/* This is a mess */}
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <Box sx={{ transform: 'scale(0.8)', paddingTop: '10px' }}>
+                        <Card sx={{ display: 'flex', alignItems: 'center', height: '100%' }}>
+                        <CardContent sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
                             <Typography variant="body1">
-                                Found {matchingProfiles.length} {matchingProfiles.length === 1 ? 'person' : 'people'}
+                            Found {matchingProfiles.length} {matchingProfiles.length === 1 ? 'person' : 'people'}
                             </Typography>
                         </CardContent>
-                    </Card>
-                </Box>
+                        </Card>
+                    </Box>
+                </div>
                 <Grid container spacing={2}>
                     {matchingProfiles.map((profile, index) => {
                         const { name, pronouns, house, year, concentration, studyBuddyInterests, cofounderInterests, cofounderSkills } = profile;
