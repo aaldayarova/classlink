@@ -120,11 +120,16 @@ function SearchPage() {
                             <Chip
                                 sx={{ 
                                     backgroundColor: theme.palette.customColors.info.bg, 
-                                    border: `1px solid ${theme.palette.customColors.info.hover}`, 
+                                    border: `1px solid ${theme.palette.customColors.info.main}`, 
                                     borderRadius: "50px", 
-                                    color: theme.palette.customColors.info.hover, 
                                     "& .MuiChip-deleteIcon": {
-                                        color: theme.palette.customColors.info.hover,
+                                        color: theme.palette.customColors.info.main,
+                                        "&:hover": {
+                                            color: theme.palette.customColors.info.hover // Change this value to adjust the color when hovering over the delete icon
+                                        },
+                                        "&:active": {
+                                            color: theme.palette.customColors.info.pressed // Change this value to adjust the color when clicking on the delete icon
+                                        }
                                     },
                                 }}
                                 label={query}
@@ -142,11 +147,16 @@ function SearchPage() {
                             <Chip
                                 sx={{ 
                                     backgroundColor: theme.palette.customColors.primary.bg, 
-                                    border: `1px solid ${theme.palette.customColors.primary.hover}`, 
+                                    border: `1px solid ${theme.palette.customColors.primary.main}`, 
                                     borderRadius: "50px", 
-                                    color: theme.palette.customColors.primary.hover, 
                                     "& .MuiChip-deleteIcon": {
-                                        color: theme.palette.customColors.primary.hover,
+                                        color: theme.palette.customColors.primary.main,
+                                        "&:hover": {
+                                            color: theme.palette.customColors.primary.hover // Change this value to adjust the color when hovering over the delete icon
+                                        },
+                                        "&:active": {
+                                            color: theme.palette.customColors.primary.pressed // Change this value to adjust the color when clicking on the delete icon
+                                        }
                                     },
                                 }}
                                 label={query}
@@ -163,11 +173,16 @@ function SearchPage() {
                             <Chip
                                 sx={{ 
                                     backgroundColor: theme.palette.customColors.warning.bg, 
-                                    border: `1px solid ${theme.palette.customColors.warning.border}`, 
+                                    border: `1px solid ${theme.palette.customColors.warning.main}`, 
                                     borderRadius: "50px", 
-                                    color: theme.palette.customColors.warning.border, 
                                     "& .MuiChip-deleteIcon": {
-                                        color: theme.palette.customColors.warning.border,
+                                        color: theme.palette.customColors.warning.main,
+                                        "&:hover": {
+                                            color: theme.palette.customColors.warning.hover // Change this value to adjust the color when hovering over the delete icon
+                                        },
+                                        "&:active": {
+                                            color: theme.palette.customColors.warning.pressed // Change this value to adjust the color when clicking on the delete icon
+                                        }
                                     },
                                 }}
                                 label={query}
@@ -238,7 +253,7 @@ function SearchPage() {
             }
             {selectedCategory && selectedCategory.id == COFOUNDER_ID &&
             <>
-            <Grid container sx={{ paddingBottom: '8px' }}>
+            <Grid container sx={{ paddingTop: '10px', paddingBottom: '8px' }}>
                 <Grid item>
                     <Typography variant="h6">Who is interested in...</Typography>
                 </Grid>
@@ -341,9 +356,9 @@ function SearchPage() {
                     background: "#F1FAF0",
                     display: "inline-block",
                     padding: "6px",
-                    marginTop: "8px",
+                    marginTop: "20px",
                     marginBottom: "8px",
-                    color: "grey"
+                    color: theme.palette.customColors.neutral[70], 
                 }}>
                     <Typography variant="subtitle2" component="div"> Found {matchingProfiles.length} {matchingProfiles.length === 1 ? 'person' : 'people'}</Typography>
                 </div>
@@ -378,6 +393,11 @@ function SearchPage() {
                                                     <Grid item key={index}>
                                                         <Chip
                                                             label={interest}
+                                                            sx={{
+                                                                backgroundColor: theme.palette.customColors.info.bg,
+                                                                border: `1px solid ${theme.palette.customColors.info.main}`, 
+                                                                borderRadius: "50px", 
+                                                            }}
                                                         />
                                                     </Grid>
                                                 )
@@ -387,6 +407,11 @@ function SearchPage() {
                                                     <Grid item key={index}>
                                                         <Chip
                                                             label={interest}
+                                                            sx={{ 
+                                                                backgroundColor: theme.palette.customColors.primary.bg, 
+                                                                border: `1px solid ${theme.palette.customColors.primary.main}`, 
+                                                                borderRadius: "50px", 
+                                                            }}
                                                         />
                                                     </Grid>
                                                 )
@@ -396,6 +421,11 @@ function SearchPage() {
                                                     <Grid item key={index}>
                                                         <Chip
                                                             label={skill}
+                                                            sx={{
+                                                                backgroundColor: theme.palette.customColors.warning.bg,
+                                                                border: `1px solid ${theme.palette.customColors.warning.main}`, 
+                                                                borderRadius: "50px", 
+                                                            }}
                                                         />
                                                     </Grid>
                                                 )

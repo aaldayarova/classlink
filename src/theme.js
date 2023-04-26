@@ -1,6 +1,9 @@
 import { createTheme } from '@mui/material/styles';
 
 export const theme = createTheme({
+  typography: {
+    fontFamily: "'Nunito Sans', sans-serif",
+  },
   palette: {
     customColors: {
         primary: {
@@ -33,8 +36,21 @@ export const theme = createTheme({
             main: '#FFD900',
             bg: '#FDF8DE',
             focus: '#FFF2AA',
-            border: '#776501',
+            // border: '#F8D825',
+            border: '#FFEC80',
             hover: '#FFE655',
+        },
+        neutral: {
+            10: '#FFFFFF',
+            20: '#F5F5F5',
+            30: '#EDEDED',
+            40: '#E0E0E0',
+            50: '#C2C2C2',
+            60: '#9E9E9E',
+            70: '#757575',
+            80: '#616161',
+            90: '#424242',
+            100: '#0A0A0A',
         },
       },
     },
