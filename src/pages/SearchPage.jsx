@@ -334,17 +334,18 @@ function SearchPage() {
             }
             {(studyBuddyQueries.length > 0 || cofounderSkillQueries.length > 0 || cofounderInterestQueries.length > 0) && 
             <>
-                {/* This is a mess */}
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <Box sx={{ transform: 'scale(0.8)', paddingTop: '10px' }}>
-                        <Card sx={{ display: 'flex', alignItems: 'center', height: '100%' }}>
-                        <CardContent sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-                            <Typography variant="body1">
-                            Found {matchingProfiles.length} {matchingProfiles.length === 1 ? 'person' : 'people'}
-                            </Typography>
-                        </CardContent>
-                        </Card>
-                    </Box>
+                <div style={{ 
+                    border: "2px solid #7CB97A", 
+                    boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.1)", 
+                    borderRadius: "4px", 
+                    background: "#F1FAF0",
+                    display: "inline-block",
+                    padding: "6px",
+                    marginTop: "8px",
+                    marginBottom: "8px",
+                    color: "grey"
+                }}>
+                    <Typography variant="subtitle2" component="div"> Found {matchingProfiles.length} {matchingProfiles.length === 1 ? 'person' : 'people'}</Typography>
                 </div>
                 <Grid container spacing={2}>
                     {matchingProfiles.map((profile, index) => {
