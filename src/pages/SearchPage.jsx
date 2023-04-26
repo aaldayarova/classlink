@@ -16,12 +16,6 @@ import { Link } from 'react-router-dom'
 const STUDY_BUDDY_ID = 1;
 const COFOUNDER_ID = 2;
 
-// Query types:
-const STUDY_BUDDY_WORK_ON_QUERY_ID = 1;
-const COFOUNDER_INTEREST_QUERY_ID = 2;
-const COFOUNDER_SKILL_QUERY_ID = 3;
-
-// TODO: Add actual categories
 const categories = [
     { id: STUDY_BUDDY_ID, label: 'Study buddy' },
     { id: COFOUNDER_ID, label: 'Cofounder' },
@@ -44,7 +38,7 @@ const profiles = [
         pronouns: 'she/her',
         house: 'Eliot',
         year: '2024',
-        concentration: '',
+        concentration: 'Computer Science',
         studyBuddyInterests: ['Science', 'CS 178'],
         cofounderInterests: ['Food', 'Science'],
         cofounderSkills: ['Robotics'],
@@ -91,8 +85,6 @@ function SearchPage() {
         }
     }) : []
 
-    // const matchingProfiles = [];
-
     return (
         <>
             {/* TODO: Add profile photo */}
@@ -138,7 +130,7 @@ function SearchPage() {
                     <Typography variant="h3"> ..."</Typography>
                 </Grid>
             </Grid>
-            {selectedCategory && <Grid container>
+            {selectedCategory && <Grid container spacing={1}>
                 {selectedCategory.id == STUDY_BUDDY_ID && studyBuddyQueries.map((query, index) => {
                     return (
                         <Grid item key={index}>
@@ -309,14 +301,58 @@ function SearchPage() {
                 </Box>
                 <Grid container spacing={2}>
                     {matchingProfiles.map((profile, index) => {
+                        const { name, pronouns, house, year, concentration, studyBuddyInterests, cofounderInterests, cofounderSkills } = profile;
+
                         return (
                             <Grid item key={index}>
-                                {/* TODO: Add more of profile to card */}
-                                <Card>
+                                <Card sx={{ width: '300px' }}>
                                     <CardContent>
-                                        <Typography variant="h5" component="div">
-                                            {profile.name}
+                                        <div style={{ textAlign: 'center', paddingBottom: '10px' }}>
+                                            <div style={{ textAlign: 'center', paddingBottom: '6px', justifyContent: 'center', display: 'flex' }}>
+                                                <Avatar alt="Your Profile">{name[0]}</Avatar>
+                                            </div>
+                                            <Typography variant="h6" component="div">
+                                                {name}
+                                            </Typography>
+                                            <Typography variant="caption" component="div">
+                                                {pronouns}
+                                            </Typography>
+                                            <Typography variant="subtitle2" component="div">
+                                                {house}, {year}, {concentration}
+                                            </Typography>
+                                        </div>
+                                        <Typography variant="body2" component="div" sx={{ paddingBottom: '10px' }}>
+                                            Is interested in working on...
                                         </Typography>
+                                        <Grid container spacing={1}>
+                                            {selectedCategory.id == STUDY_BUDDY_ID && studyBuddyInterests.map((interest, index) => {
+                                                return (
+                                                    <Grid item key={index}>
+                                                        <Chip
+                                                            label={interest}
+                                                        />
+                                                    </Grid>
+                                                )
+                                            })}
+                                            {selectedCategory.id == COFOUNDER_ID && cofounderInterests.map((interest, index) => {
+                                                return (
+                                                    <Grid item key={index}>
+                                                        <Chip
+                                                            label={interest}
+                                                        />
+                                                    </Grid>
+                                                )
+                                            })}
+                                            {selectedCategory.id == COFOUNDER_ID && cofounderSkills.map((skill, index) => {
+                                                return (
+                                                    <Grid item key={index}>
+                                                        <Chip
+                                                            label={skill}
+                                                        />
+                                                    </Grid>
+                                                )
+                                            })}
+                                        </Grid>
                                     </CardContent>
                                 </Card>
                             </Grid>
