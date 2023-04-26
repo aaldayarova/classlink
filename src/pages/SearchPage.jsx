@@ -11,6 +11,9 @@ import CardContent from '@mui/material/CardContent'
 import Box from '@mui/material/Box'
 import Avatar from '@mui/material/Avatar'
 import { Link } from 'react-router-dom'
+import { useTheme } from '@mui/material/styles'
+import { profiles } from '../constants/profiles'
+// import { ReactComponent as XIcon } from '../assets/icons/X.svg'
 
 // Category type ids:
 const STUDY_BUDDY_ID = 1;
@@ -19,30 +22,6 @@ const COFOUNDER_ID = 2;
 const categories = [
     { id: STUDY_BUDDY_ID, label: 'Study buddy' },
     { id: COFOUNDER_ID, label: 'Cofounder' },
-]
-
-// TODO: Create actual storage for profiles
-const profiles = [
-    {
-        name: 'Aika Aldayarova',
-        pronouns: 'she/her',
-        house: 'Eliot',
-        year: '2024',
-        concentration: 'Computer Science',
-        studyBuddyInterests: ['Science', 'CS 178'],
-        cofounderInterests: ['Food', 'Science'],
-        cofounderSkills: ['Robotics'],
-    },
-    {
-        name: 'Olivia Wenzel',
-        pronouns: 'she/her',
-        house: 'Eliot',
-        year: '2024',
-        concentration: 'Computer Science',
-        studyBuddyInterests: ['Science', 'CS 178'],
-        cofounderInterests: ['Food', 'Science'],
-        cofounderSkills: ['Robotics'],
-    },
 ]
 
 function SearchPage() {
@@ -55,6 +34,8 @@ function SearchPage() {
     const [studyBuddyQueries, setStudyBuddyQueries] = useState([])
     const [cofounderInterestQueries, setCofounderInterestQueries] = useState([])
     const [cofounderSkillQueries, setCofounderSkillQueries] = useState([])
+
+    const theme = useTheme();
 
     // This computes on every render, which is very inefficient.
     // TODO: Consider when/how to compute more efficiently...
@@ -137,9 +118,24 @@ function SearchPage() {
                     return (
                         <Grid item key={index}>
                             <Chip
+                                sx={{ 
+                                    backgroundColor: theme.palette.customColors.info.bg, 
+                                    border: `1px solid ${theme.palette.customColors.info.main}`, 
+                                    borderRadius: "50px", 
+                                    "& .MuiChip-deleteIcon": {
+                                        color: theme.palette.customColors.info.main,
+                                        "&:hover": {
+                                            color: theme.palette.customColors.info.hover // Change this value to adjust the color when hovering over the delete icon
+                                        },
+                                        "&:active": {
+                                            color: theme.palette.customColors.info.pressed // Change this value to adjust the color when clicking on the delete icon
+                                        }
+                                    },
+                                }}
                                 label={query}
+                                // deleteIcon={<XIcon style={{ fontSize: "0.5rem", color: theme.palette.customColors.info.hover, }} />}
                                 onDelete={() => {
-                                    setStudyBuddyQueries(studyBuddyQueries.filter((q) => !(q.name === query.name && q.categoryId === query.categoryId)))
+                                    setStudyBuddyQueries(studyBuddyQueries.filter((q) => q !== query))
                                 }}
                             />
                         </Grid>
@@ -149,9 +145,23 @@ function SearchPage() {
                     return (
                         <Grid item key={index}>
                             <Chip
+                                sx={{ 
+                                    backgroundColor: theme.palette.customColors.primary.bg, 
+                                    border: `1px solid ${theme.palette.customColors.primary.main}`, 
+                                    borderRadius: "50px", 
+                                    "& .MuiChip-deleteIcon": {
+                                        color: theme.palette.customColors.primary.main,
+                                        "&:hover": {
+                                            color: theme.palette.customColors.primary.hover // Change this value to adjust the color when hovering over the delete icon
+                                        },
+                                        "&:active": {
+                                            color: theme.palette.customColors.primary.pressed // Change this value to adjust the color when clicking on the delete icon
+                                        }
+                                    },
+                                }}
                                 label={query}
                                 onDelete={() => {
-                                    setCofounderInterestQueries(cofounderInterestQueries.filter((q) => !(q.name === query.name && q.categoryId === query.categoryId)))
+                                    setCofounderInterestQueries(cofounderInterestQueries.filter((q) => q !== query))
                                 }}
                             />
                         </Grid>
@@ -161,9 +171,23 @@ function SearchPage() {
                     return (
                         <Grid item key={index}>
                             <Chip
+                                sx={{ 
+                                    backgroundColor: theme.palette.customColors.warning.bg, 
+                                    border: `1px solid ${theme.palette.customColors.warning.main}`, 
+                                    borderRadius: "50px", 
+                                    "& .MuiChip-deleteIcon": {
+                                        color: theme.palette.customColors.warning.main,
+                                        "&:hover": {
+                                            color: theme.palette.customColors.warning.hover // Change this value to adjust the color when hovering over the delete icon
+                                        },
+                                        "&:active": {
+                                            color: theme.palette.customColors.warning.pressed // Change this value to adjust the color when clicking on the delete icon
+                                        }
+                                    },
+                                }}
                                 label={query}
                                 onDelete={() => {
-                                    setCofounderSkillQueries(cofounderSkillQueries.filter((q) => !(q.name === query.name && q.categoryId === query.categoryId)))
+                                    setCofounderSkillQueries(cofounderSkillQueries.filter((q) => q !== query))
                                 }}
                             />
                         </Grid>
@@ -181,9 +205,25 @@ function SearchPage() {
                 <Grid item>
                     <TextField 
                       variant="outlined"
+                      sx={{ 
+                        backgroundColor: theme.palette.customColors.info.bg, 
+                        "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": {
+                            borderColor: theme.palette.customColors.info.hover,
+                        },
+                        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                          borderColor: theme.palette.customColors.info.hover,
+                        },
+                        // "& .MuiSvgIcon-root.MuiIconButton-root:hover": {
+                        //     color: theme.palette.customColors.info.hover,
+                        // },
+                        //   "& .MuiSvgIcon-root.MuiIconButton-root:active": {
+                        //     color: theme.palette.customColors.info.hover,
+                        // }
+                      }}
                       InputProps={{
-                        startAdornment: (
+                        endAdornment: (
                             <InputAdornment position="start">
+                                {/* sx={{ "&:hover": { color: theme.palette.customColors.info.hover }, "&:active": { color: theme.palette.customColors.info.hover } }} */}
                                 <Search />
                             </InputAdornment>
                         )
@@ -213,7 +253,7 @@ function SearchPage() {
             }
             {selectedCategory && selectedCategory.id == COFOUNDER_ID &&
             <>
-            <Grid container sx={{ paddingBottom: '8px' }}>
+            <Grid container sx={{ paddingTop: '10px', paddingBottom: '8px' }}>
                 <Grid item>
                     <Typography variant="h6">Who is interested in...</Typography>
                 </Grid>
@@ -222,6 +262,15 @@ function SearchPage() {
                 <Grid item>
                     <TextField 
                       variant="outlined"
+                      sx={{ 
+                        backgroundColor: theme.palette.customColors.primary.bg, 
+                        "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": {
+                            borderColor: theme.palette.customColors.primary.hover,
+                        },
+                        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                          borderColor: theme.palette.customColors.primary.hover,
+                        },
+                      }}
                       InputProps={{
                         startAdornment: (
                             <InputAdornment position="start">
@@ -259,6 +308,15 @@ function SearchPage() {
                 <Grid item>
                     <TextField 
                       variant="outlined"
+                      sx={{ 
+                        backgroundColor: theme.palette.customColors.warning.bg, 
+                        "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": {
+                            borderColor: theme.palette.customColors.warning.hover,
+                        },
+                        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                          borderColor: theme.palette.customColors.warning.hover,
+                        },
+                      }}
                       InputProps={{
                         startAdornment: (
                             <InputAdornment position="start">
@@ -291,17 +349,18 @@ function SearchPage() {
             }
             {(studyBuddyQueries.length > 0 || cofounderSkillQueries.length > 0 || cofounderInterestQueries.length > 0) && 
             <>
-                {/* This is a mess */}
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <Box sx={{ transform: 'scale(0.8)', paddingTop: '10px' }}>
-                        <Card sx={{ display: 'flex', alignItems: 'center', height: '100%' }}>
-                        <CardContent sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-                            <Typography variant="body1">
-                            Found {matchingProfiles.length} {matchingProfiles.length === 1 ? 'person' : 'people'}
-                            </Typography>
-                        </CardContent>
-                        </Card>
-                    </Box>
+                <div style={{ 
+                    border: "2px solid #7CB97A", 
+                    boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.1)", 
+                    borderRadius: "4px", 
+                    background: "#F1FAF0",
+                    display: "inline-block",
+                    padding: "6px",
+                    marginTop: "20px",
+                    marginBottom: "8px",
+                    color: theme.palette.customColors.neutral[70], 
+                }}>
+                    <Typography variant="subtitle2" component="div"> Found {matchingProfiles.length} {matchingProfiles.length === 1 ? 'person' : 'people'}</Typography>
                 </div>
                 <Grid container spacing={2}>
                     {matchingProfiles.map((profile, index) => {
@@ -334,6 +393,11 @@ function SearchPage() {
                                                     <Grid item key={index}>
                                                         <Chip
                                                             label={interest}
+                                                            sx={{
+                                                                backgroundColor: theme.palette.customColors.info.bg,
+                                                                border: `1px solid ${theme.palette.customColors.info.main}`, 
+                                                                borderRadius: "50px", 
+                                                            }}
                                                         />
                                                     </Grid>
                                                 )
@@ -343,6 +407,11 @@ function SearchPage() {
                                                     <Grid item key={index}>
                                                         <Chip
                                                             label={interest}
+                                                            sx={{ 
+                                                                backgroundColor: theme.palette.customColors.primary.bg, 
+                                                                border: `1px solid ${theme.palette.customColors.primary.main}`, 
+                                                                borderRadius: "50px", 
+                                                            }}
                                                         />
                                                     </Grid>
                                                 )
@@ -352,6 +421,11 @@ function SearchPage() {
                                                     <Grid item key={index}>
                                                         <Chip
                                                             label={skill}
+                                                            sx={{
+                                                                backgroundColor: theme.palette.customColors.warning.bg,
+                                                                border: `1px solid ${theme.palette.customColors.warning.main}`, 
+                                                                borderRadius: "50px", 
+                                                            }}
                                                         />
                                                     </Grid>
                                                 )
