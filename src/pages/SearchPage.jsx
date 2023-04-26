@@ -385,7 +385,8 @@ function SearchPage() {
                                             </Typography>
                                         </div>
                                         <Typography variant="body2" component="div" sx={{ paddingBottom: '10px' }}>
-                                            Is interested in working on...
+                                            {selectedCategory.id == STUDY_BUDDY_ID && 'Is interested in working on...'}
+                                            {selectedCategory.id == COFOUNDER_ID && 'Is interested & skilled in...'}
                                         </Typography>
                                         <Grid container spacing={1}>
                                             {selectedCategory.id == STUDY_BUDDY_ID && studyBuddyInterests.map((interest, index) => {
