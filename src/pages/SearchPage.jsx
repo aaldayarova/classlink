@@ -350,10 +350,10 @@ function SearchPage() {
             {(studyBuddyQueries.length > 0 || cofounderSkillQueries.length > 0 || cofounderInterestQueries.length > 0) && 
             <>
                 <div style={{ 
-                    border: "2px solid #7CB97A", 
+                    border: `2px solid ${theme.palette.customColors.success.border}`, 
                     boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.1)", 
                     borderRadius: "4px", 
-                    background: "#F1FAF0",
+                    background: theme.palette.customColors.success.bg,
                     display: "inline-block",
                     padding: "6px",
                     marginTop: "20px",
