@@ -8,12 +8,13 @@ import { Search } from '@mui/icons-material'
 import Chip from '@mui/material/Chip'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
-import Box from '@mui/material/Box'
 import Avatar from '@mui/material/Avatar'
 import { Link } from 'react-router-dom'
 import { useTheme } from '@mui/material/styles'
 import { profiles } from '../constants/profiles'
 // import { ReactComponent as XIcon } from '../assets/icons/X.svg'
+
+import './SearchPage.css';
 
 // Category type ids:
 const STUDY_BUDDY_ID = 1;
@@ -43,7 +44,7 @@ function SearchPage() {
     const matchingProfiles = selectedCategory ? profiles.filter((profile) => {
         if (selectedCategory.id === STUDY_BUDDY_ID) {
             for (let query of studyBuddyQueries) {
-                if (profile.studyBuddyInterests.includes(query)) {
+                if (profile.studyBuddy.subjects.includes(query)) {
                     continue
                 }
                 return false
@@ -51,13 +52,13 @@ function SearchPage() {
             return true
         } else {
             for (let query of cofounderInterestQueries) {
-                if (profile.cofounderInterests.includes(query)) {
+                if (profile.cofounder.interests.includes(query)) {
                     continue
                 }
                 return false
             }
             for (let query of cofounderSkillQueries) {
-                if (profile.cofounderSkills.includes(query)) {
+                if (profile.cofounder.skills.includes(query)) {
                     continue
                 }
                 return false
@@ -79,7 +80,7 @@ function SearchPage() {
             {/* justifyContent={'center'} */}
             <Grid container spacing={2} >
                 <Grid item>
-                    <Typography variant="h4">"I want to search for a </Typography>
+                    <Typography sx={{ fontSize: "28px" }}>"I want to search for a </Typography>
                 </Grid>
                 <Grid item>
                     <Autocomplete
@@ -110,7 +111,7 @@ function SearchPage() {
                     />
                 </Grid>
                 <Grid item>
-                    <Typography variant="h4"> "</Typography>
+                    <Typography sx={{ fontSize: "28px" }}> "</Typography>
                 </Grid>
             </Grid>
             {selectedCategory && <Grid container spacing={1} sx={{ paddingTop: '10px' }}>
@@ -350,26 +351,80 @@ function SearchPage() {
             {(studyBuddyQueries.length > 0 || cofounderSkillQueries.length > 0 || cofounderInterestQueries.length > 0) && 
             <>
                 <div style={{ 
-                    border: "2px solid #7CB97A", 
+                    border: `2px solid ${theme.palette.customColors.success.border}`, 
                     boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.1)", 
                     borderRadius: "4px", 
-                    background: "#F1FAF0",
+                    background: theme.palette.customColors.success.bg,
                     display: "inline-block",
                     padding: "6px",
                     marginTop: "20px",
                     marginBottom: "8px",
-                    color: theme.palette.customColors.neutral[70], 
+                    color: theme.palette.customColors.neutral[70],
                 }}>
                     <Typography variant="subtitle2" component="div"> Found {matchingProfiles.length} {matchingProfiles.length === 1 ? 'person' : 'people'}</Typography>
                 </div>
                 <Grid container spacing={2}>
                     {matchingProfiles.map((profile, index) => {
-                        const { name, pronouns, house, year, concentration, studyBuddyInterests, cofounderInterests, cofounderSkills } = profile;
+                        const { name, pronouns, house, year, concentration, studyBuddy, cofounder } = profile;
 
                         return (
                             <Grid item key={index}>
                                 <Card sx={{ width: '300px' }}>
-                                    <CardContent>
+                                <CardContent sx={{
+                                    position: 'relative',
+                                    '&:hover::before': {
+                                      content: '""',
+                                      position: 'absolute',
+                                      top: 0,
+                                      left: 0,
+                                      width: '100%',
+                                      height: '100%',
+                                      backgroundColor: 'rgba(0, 0, 0, 0.75)',
+                                      display: 'flex',
+                                      justifyContent: 'center',
+                                      alignItems: 'center',
+                                      zIndex: 1,
+                                      overflow: 'auto',
+                                    },
+                                    '.hover-content': {
+                                        position: 'absolute',
+                                        visibility: 'hidden',
+                                        top: "50%",
+                                        left: "50%",
+                                        transform: "translate(-50%, -50%)",
+                                        zIndex: 2,
+                                        textAlign: 'center',
+                                        color: 'white',
+                                        maxHeight: '80vh',
+                                        overflow: 'auto',
+                                        width: '90%',
+                                        height: '90%',
+                                    },
+                                    '&:hover > .hover-content': {
+                                        visibility: 'visible',
+                                        overflowY: 'auto',
+                                    }
+                                }}>
+                                        <div className="hover-content">
+                                            {selectedCategory.id == STUDY_BUDDY_ID && ['goals', 'purpose', 'frequency'].map((category, index) => {
+                                                return <div key={index}>
+                                                    <Typography variant="h6" component="div">
+                                                        {category[0].toUpperCase() + category.slice(1)}
+                                                    </Typography>
+                                                    <Typography variant="subtitle1" component="div">
+                                                        {studyBuddy[category]}
+                                                    </Typography>
+                                                </div>
+                                            })}
+                                            {selectedCategory.id == COFOUNDER_ID && <div>
+                                                    <Typography variant="h6" component="div">
+                                                        Timing
+                                                    </Typography>
+                                                    <Typography variant="subtitle1" component="div">
+                                                        {cofounder["timing"]}
+                                                    </Typography>
+                                                </div>}
+                                        </div>
                                         <div style={{ textAlign: 'center', paddingBottom: '10px' }}>
                                             <div style={{ textAlign: 'center', paddingBottom: '6px', justifyContent: 'center', display: 'flex' }}>
                                                 <Avatar alt="Your Profile">{name[0]}</Avatar>
@@ -385,10 +440,11 @@ function SearchPage() {
                                             </Typography>
                                         </div>
                                         <Typography variant="body2" component="div" sx={{ paddingBottom: '10px' }}>
-                                            Is interested in working on...
+                                            {selectedCategory.id == STUDY_BUDDY_ID && 'Is interested in working on...'}
+                                            {selectedCategory.id == COFOUNDER_ID && 'Is interested & skilled in...'}
                                         </Typography>
                                         <Grid container spacing={1}>
-                                            {selectedCategory.id == STUDY_BUDDY_ID && studyBuddyInterests.map((interest, index) => {
+                                            {selectedCategory.id == STUDY_BUDDY_ID && studyBuddy.subjects.map((interest, index) => {
                                                 return (
                                                     <Grid item key={index}>
                                                         <Chip
@@ -402,7 +458,7 @@ function SearchPage() {
                                                     </Grid>
                                                 )
                                             })}
-                                            {selectedCategory.id == COFOUNDER_ID && cofounderInterests.map((interest, index) => {
+                                            {selectedCategory.id == COFOUNDER_ID && cofounder.interests.map((interest, index) => {
                                                 return (
                                                     <Grid item key={index}>
                                                         <Chip
@@ -416,7 +472,7 @@ function SearchPage() {
                                                     </Grid>
                                                 )
                                             })}
-                                            {selectedCategory.id == COFOUNDER_ID && cofounderSkills.map((skill, index) => {
+                                            {selectedCategory.id == COFOUNDER_ID && cofounder.skills.map((skill, index) => {
                                                 return (
                                                     <Grid item key={index}>
                                                         <Chip
