@@ -15,6 +15,8 @@ import { useTheme } from '@mui/material/styles'
 import { profiles } from '../constants/profiles'
 // import { ReactComponent as XIcon } from '../assets/icons/X.svg'
 
+import './SearchPage.css';
+
 // Category type ids:
 const STUDY_BUDDY_ID = 1;
 const COFOUNDER_ID = 2;
@@ -369,7 +371,30 @@ function SearchPage() {
                         return (
                             <Grid item key={index}>
                                 <Card sx={{ width: '300px' }}>
-                                    <CardContent>
+                                <CardContent sx={{
+                                    position: 'relative',
+                                    '&:hover::before': {
+                                      content: '""',
+                                      position: 'absolute',
+                                      top: 0,
+                                      left: 0,
+                                      width: '100%',
+                                      height: '100%',
+                                      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                                      display: 'flex',
+                                      justifyContent: 'center',
+                                      alignItems: 'center',
+                                      zIndex: 1,
+                                    },
+                                    '.hover-content': {
+                                        visibility: 'hidden',
+                                    },
+                                    '&:hover > .hover-content': {
+                                        zIndex: 2,
+                                        visibility: 'visible',
+                                    }
+                                }}>
+                                        <div className="hover-content">Hi</div>
                                         <div style={{ textAlign: 'center', paddingBottom: '10px' }}>
                                             <div style={{ textAlign: 'center', paddingBottom: '6px', justifyContent: 'center', display: 'flex' }}>
                                                 <Avatar alt="Your Profile">{name[0]}</Avatar>
