@@ -390,8 +390,10 @@ function SearchPage() {
                                         visibility: 'hidden',
                                     },
                                     '&:hover > .hover-content': {
-                                        zIndex: 2,
+                                        position: 'relative',
                                         visibility: 'visible',
+                                        color: 'white',
+                                        zIndex: 2,
                                     }
                                 }}>
                                         <div className="hover-content">Hi</div>
