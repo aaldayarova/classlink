@@ -20,7 +20,7 @@ function toLowerCaseNoSpaces(str) {
 }
 
 function includesQuery(strings, query) {
-    return strings.map((str) => toLowerCaseNoSpaces(str).includes(toLowerCaseNoSpaces(query)))
+    return strings.map((str) => toLowerCaseNoSpaces(str)).includes(toLowerCaseNoSpaces(query))
 }
 
 function SearchPage() {
