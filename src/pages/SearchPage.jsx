@@ -15,6 +15,14 @@ import ProfileCard from '../components/ProfileCard'
 
 import './SearchPage.css';
 
+function toLowerCaseNoSpaces(str) {
+    return str.toLowerCase().replace(' ', '')
+}
+
+function includesQuery(strings, query) {
+    return strings.map((str) => toLowerCaseNoSpaces(str).includes(toLowerCaseNoSpaces(query)))
+}
+
 function SearchPage() {
     const [selectedCategory, setSelectedCategory] = useState()
 
@@ -34,7 +42,7 @@ function SearchPage() {
     const matchingProfiles = selectedCategory ? profiles.filter((profile) => {
         if (selectedCategory.id === STUDY_BUDDY_ID) {
             for (let query of studyBuddyQueries) {
-                if (profile.studyBuddy.subjects.includes(query)) {
+                if (includesQuery(profile.studyBuddy.subjects, query)) {
                     continue
                 }
                 return false
@@ -42,13 +50,13 @@ function SearchPage() {
             return true
         } else {
             for (let query of cofounderInterestQueries) {
-                if (profile.cofounder.interests.includes(query)) {
+                if (includesQuery(profile.cofounder.interests, query)) {
                     continue
                 }
                 return false
             }
             for (let query of cofounderSkillQueries) {
-                if (profile.cofounder.skills.includes(query)) {
+                if (includesQuery(profile.cofounder.skills, query)) {
                     continue
                 }
                 return false
