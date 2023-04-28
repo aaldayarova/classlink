@@ -11,6 +11,7 @@ import { profiles } from '../constants/profiles'
 import ChipGrid from '../components/ChipGrid'
 import DecoratedTextField from '../components/DecoratedTextField'
 import { STUDY_BUDDY_ID, COFOUNDER_ID, categories } from '../constants/ids'
+import ProfileCard from '../components/ProfileCard'
 
 import './SearchPage.css';
 
@@ -66,13 +67,14 @@ function SearchPage() {
                     </Link>
                 </Grid>
             </Grid>
-            <div>
+        <div style={{ width: '950px', margin: 'auto' }}>
             <Grid container spacing={2}>
                 <Grid item>
                     <Typography sx={{ fontSize: "28px" }}>"I want to search for a </Typography>
                 </Grid>
                 <Grid item>
                     <Autocomplete
+                      sx={{ width: '610px' }}
                       size={'small'}
                       defaultValue={null}
                       isOptionEqualToValue={(option, value) => option.id === value.id && option.name === value.name}
@@ -95,7 +97,6 @@ function SearchPage() {
                       disableClearable
                       id="combo-box-demo"
                       options={categories}
-                      sx={{ width: 300 }}
                       renderInput={(params) => <TextField {...params} />}
                     />
                 </Grid>
@@ -115,7 +116,6 @@ function SearchPage() {
                 <DecoratedTextField paddingTop='0px' label={'Who is skilled in...'} colorClass={'warning'} currentQuery={currentCofounderSkillQuery} setCurrentQuery={setCurrentCofounderSkillQuery} queries={cofounderSkillQueries} setQueries={setCofounderSkillQueries}/>
             </>
             }
-            </div>
             {(studyBuddyQueries.length > 0 || cofounderSkillQueries.length > 0 || cofounderInterestQueries.length > 0) && 
             <>
                 <div style={{ 
@@ -133,10 +133,11 @@ function SearchPage() {
                 </div>
                 <Grid container spacing={2}>
                     {matchingProfiles.map((profile, index) => {
-                        return <ProfileCard selectedCategory={selectedCategory} index={index} profile={profile}/>
+                        return <ProfileCard key={index} selectedCategory={selectedCategory} profile={profile}/>
                     })}
                 </Grid>
             </>}
+        </div>
         </>
     )
   }

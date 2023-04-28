@@ -3,13 +3,14 @@ import Typography from '@mui/material/Typography'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import ProfileCardChipGrid from './ProfileCardChipGrid'
+import Avatar from '@mui/material/Avatar'
 import { STUDY_BUDDY_ID, COFOUNDER_ID } from '../constants/ids'
 
-function ProfileCard({ selectedCategory, index, profile }) {
+function ProfileCard({ selectedCategory, profile }) {
     const { name, pronouns, house, year, concentration, studyBuddy, cofounder } = profile;
     
     return (
-        <Grid item key={index}>
+        <Grid item>
             <Card sx={{ width: '300px' }}>
             <CardContent sx={{
                 position: 'relative',

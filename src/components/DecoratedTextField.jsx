@@ -15,7 +15,7 @@ function DecoratedTextField({ paddingTop = '10px', paddingBottom = '8px', label,
                     <Typography variant="h6">{label}</Typography>
                 </Grid>
             </Grid>
-            <Grid container sx={{ width: '100%' }}>
+            <Grid container>
                 <Grid item>
                     <TextField 
                       variant="outlined"
@@ -27,7 +27,7 @@ function DecoratedTextField({ paddingTop = '10px', paddingBottom = '8px', label,
                         "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
                           borderColor: theme.palette.customColors[colorClass].hover,
                         },
-                        width: "100%",
+                        width: "930px",
                       }}
                       InputProps={{
                         endAdornment: (
