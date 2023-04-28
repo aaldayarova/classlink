@@ -3,8 +3,6 @@ import Typography from '@mui/material/Typography'
 import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
 import Grid from '@mui/material/Grid'
-import { InputAdornment } from '@mui/material'
-import { Search } from '@mui/icons-material'
 import Chip from '@mui/material/Chip'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
@@ -13,7 +11,8 @@ import { Link } from 'react-router-dom'
 import { useTheme } from '@mui/material/styles'
 import { profiles } from '../constants/profiles'
 // import { ReactComponent as XIcon } from '../assets/icons/X.svg'
-import ChipGrid from '../components/ChipGrid/ChipGrid'
+import ChipGrid from '../components/ChipGrid'
+import DecoratedTextField from '../components/DecoratedTextField'
 
 import './SearchPage.css';
 
@@ -120,152 +119,11 @@ function SearchPage() {
                 {selectedCategory.id == COFOUNDER_ID && <ChipGrid queries={cofounderInterestQueries} colorClass={'primary'} setQueries={setCofounderInterestQueries} />}
                 {selectedCategory.id == COFOUNDER_ID && <ChipGrid queries={cofounderSkillQueries} colorClass={'warning'} setQueries={setCofounderSkillQueries} />}
             </Grid>}
-            {selectedCategory && selectedCategory.id == STUDY_BUDDY_ID &&
-            <>
-            <Grid container sx={{ paddingTop: '10px', paddingBottom: '8px' }}>
-                <Grid item>
-                    <Typography variant="h6">To work on...</Typography>
-                </Grid>
-            </Grid>
-            <Grid container sx={{ width: '100%' }}>
-                <Grid item>
-                    <TextField 
-                      variant="outlined"
-                      sx={{ 
-                        backgroundColor: theme.palette.customColors.info.bg, 
-                        "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": {
-                            borderColor: theme.palette.customColors.info.hover,
-                        },
-                        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                          borderColor: theme.palette.customColors.info.hover,
-                        },
-                        width: "100%",
-                      }}
-                      InputProps={{
-                        endAdornment: (
-                            <InputAdornment position="start">
-                                {/* sx={{ "&:hover": { color: theme.palette.customColors.info.hover }, "&:active": { color: theme.palette.customColors.info.hover } }} */}
-                                <Search />
-                            </InputAdornment>
-                        )
-                      }}
-                      value={currentStudyBuddyQuery}
-                      onChange={(event) => {
-                        setCurrentStudyBuddyQuery(event.target.value)
-                      }}
-                      onKeyDown={(event) => {
-                        if (event.key === 'Enter') {
-                            event.preventDefault()
-
-                            const trimmed = currentStudyBuddyQuery.trim()
-                            
-                            // If the search box isn't empty & contains an element that hasn't already been searched, then add it to the list of saved queries
-                            if (trimmed !== '' && !(studyBuddyQueries.includes(trimmed))) { // prevent duplicates
-                                setStudyBuddyQueries([...studyBuddyQueries, trimmed])
-                            }
-                            // Clear the search box
-                            setCurrentStudyBuddyQuery("")
-                        }
-                      }}
-                    />
-                </Grid>
-            </Grid>
-            </>
-            }
+            {selectedCategory && selectedCategory.id == STUDY_BUDDY_ID && <DecoratedTextField label={'To work on...'} colorClass={'info'} currentQuery={currentStudyBuddyQuery} setCurrentQuery={setCurrentStudyBuddyQuery} queries={studyBuddyQueries} setQueries={setStudyBuddyQueries}/>}
             {selectedCategory && selectedCategory.id == COFOUNDER_ID &&
             <>
-            <Grid container sx={{ paddingTop: '10px', paddingBottom: '8px' }}>
-                <Grid item>
-                    <Typography variant="h6">Who is interested in...</Typography>
-                </Grid>
-            </Grid>
-            <Grid container sx={{ paddingBottom: '10px' }}>
-                <Grid item>
-                    <TextField 
-                      variant="outlined"
-                      sx={{ 
-                        backgroundColor: theme.palette.customColors.primary.bg, 
-                        "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": {
-                            borderColor: theme.palette.customColors.primary.hover,
-                        },
-                        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                          borderColor: theme.palette.customColors.primary.hover,
-                        },
-                      }}
-                      InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <Search />
-                            </InputAdornment>
-                        )
-                      }}
-                      value={currentCofounderInterestQuery}
-                      onChange={(event) => {
-                        setCurrentCofounderInterestQuery(event.target.value)
-                      }}
-                      onKeyDown={(event) => {
-                        if (event.key === 'Enter') {
-                            event.preventDefault()
-
-                            const trimmed = currentCofounderInterestQuery.trim()
-                            
-                            // If the search box isn't empty & contains an element that hasn't already been searched, then add it to the list of saved queries
-                            if (trimmed !== '' && !(cofounderInterestQueries.includes(trimmed))) { // prevent duplicates
-                                setCofounderInterestQueries([...cofounderInterestQueries, trimmed])
-                            }
-                            // Clear the search box
-                            setCurrentCofounderInterestQuery("")
-                        }
-                      }}
-                    />
-                </Grid>
-            </Grid>
-            <Grid container sx={{ paddingBottom: '8px' }}>
-                <Grid item>
-                    <Typography variant="h6">Who is skilled in...</Typography>
-                </Grid>
-            </Grid>
-            <Grid container>
-                <Grid item>
-                    <TextField 
-                      variant="outlined"
-                      sx={{ 
-                        backgroundColor: theme.palette.customColors.warning.bg, 
-                        "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": {
-                            borderColor: theme.palette.customColors.warning.hover,
-                        },
-                        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                          borderColor: theme.palette.customColors.warning.hover,
-                        },
-                      }}
-                      InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <Search />
-                            </InputAdornment>
-                        )
-                      }}
-                      value={currentCofounderSkillQuery}
-                      onChange={(event) => {
-                        setCurrentCofounderSkillQuery(event.target.value)
-                      }}
-                      onKeyDown={(event) => {
-                        if (event.key === 'Enter') {
-                            event.preventDefault()
-
-                            const trimmed = currentCofounderSkillQuery.trim()
-                            
-                            // If the search box isn't empty & contains an element that hasn't already been searched, then add it to the list of saved queries
-                            if (trimmed !== '' && !(cofounderSkillQueries.includes(trimmed))) { // prevent duplicates
-                                setCofounderSkillQueries([...cofounderSkillQueries, trimmed])
-                            }
-                            // Clear the search box
-                            setCurrentCofounderSkillQuery("")
-                        }
-                      }}
-                    />
-                </Grid>
-            </Grid>
+            <DecoratedTextField label={'Who is interested in...'} colorClass={'primary'} currentQuery={currentCofounderInterestQuery} setCurrentQuery={setCurrentCofounderInterestQuery} queries={cofounderInterestQueries} setQueries={setCofounderInterestQueries}/>
+            <DecoratedTextField paddingTop='0px' label={'Who is skilled in...'} colorClass={'warning'} currentQuery={currentCofounderSkillQuery} setCurrentQuery={setCurrentCofounderSkillQuery} queries={cofounderSkillQueries} setQueries={setCofounderSkillQueries}/>
             </>
             }
             </div>
