@@ -13,6 +13,7 @@ import { Link } from 'react-router-dom'
 import { useTheme } from '@mui/material/styles'
 import { profiles } from '../constants/profiles'
 // import { ReactComponent as XIcon } from '../assets/icons/X.svg'
+import ChipGrid from '../components/ChipGrid/ChipGrid'
 
 import './SearchPage.css';
 
@@ -77,8 +78,8 @@ function SearchPage() {
                     </Link>
                 </Grid>
             </Grid>
-            {/* justifyContent={'center'} */}
-            <Grid container spacing={2} >
+            <div>
+            <Grid container spacing={2}>
                 <Grid item>
                     <Typography sx={{ fontSize: "28px" }}>"I want to search for a </Typography>
                 </Grid>
@@ -115,85 +116,9 @@ function SearchPage() {
                 </Grid>
             </Grid>
             {selectedCategory && <Grid container spacing={1} sx={{ paddingTop: '10px' }}>
-                {selectedCategory.id == STUDY_BUDDY_ID && studyBuddyQueries.map((query, index) => {
-                    return (
-                        <Grid item key={index}>
-                            <Chip
-                                sx={{ 
-                                    backgroundColor: theme.palette.customColors.info.bg, 
-                                    border: `1px solid ${theme.palette.customColors.info.main}`, 
-                                    borderRadius: "50px", 
-                                    "& .MuiChip-deleteIcon": {
-                                        color: theme.palette.customColors.info.main,
-                                        "&:hover": {
-                                            color: theme.palette.customColors.info.hover // Change this value to adjust the color when hovering over the delete icon
-                                        },
-                                        "&:active": {
-                                            color: theme.palette.customColors.info.pressed // Change this value to adjust the color when clicking on the delete icon
-                                        }
-                                    },
-                                }}
-                                label={query}
-                                // deleteIcon={<XIcon style={{ fontSize: "0.5rem", color: theme.palette.customColors.info.hover, }} />}
-                                onDelete={() => {
-                                    setStudyBuddyQueries(studyBuddyQueries.filter((q) => q !== query))
-                                }}
-                            />
-                        </Grid>
-                    )
-                })}
-                {selectedCategory.id == COFOUNDER_ID && cofounderInterestQueries.map((query, index) => {
-                    return (
-                        <Grid item key={index}>
-                            <Chip
-                                sx={{ 
-                                    backgroundColor: theme.palette.customColors.primary.bg, 
-                                    border: `1px solid ${theme.palette.customColors.primary.main}`, 
-                                    borderRadius: "50px", 
-                                    "& .MuiChip-deleteIcon": {
-                                        color: theme.palette.customColors.primary.main,
-                                        "&:hover": {
-                                            color: theme.palette.customColors.primary.hover // Change this value to adjust the color when hovering over the delete icon
-                                        },
-                                        "&:active": {
-                                            color: theme.palette.customColors.primary.pressed // Change this value to adjust the color when clicking on the delete icon
-                                        }
-                                    },
-                                }}
-                                label={query}
-                                onDelete={() => {
-                                    setCofounderInterestQueries(cofounderInterestQueries.filter((q) => q !== query))
-                                }}
-                            />
-                        </Grid>
-                    )
-                })}
-                {selectedCategory.id == COFOUNDER_ID && cofounderSkillQueries.map((query, index) => {
-                    return (
-                        <Grid item key={index}>
-                            <Chip
-                                sx={{ 
-                                    backgroundColor: theme.palette.customColors.warning.bg, 
-                                    border: `1px solid ${theme.palette.customColors.warning.main}`, 
-                                    borderRadius: "50px", 
-                                    "& .MuiChip-deleteIcon": {
-                                        color: theme.palette.customColors.warning.main,
-                                        "&:hover": {
-                                            color: theme.palette.customColors.warning.hover // Change this value to adjust the color when hovering over the delete icon
-                                        },
-                                        "&:active": {
-                                            color: theme.palette.customColors.warning.pressed // Change this value to adjust the color when clicking on the delete icon
-                                        }
-                                    },
-                                }}
-                                label={query}
-                                onDelete={() => {
-                                    setCofounderSkillQueries(cofounderSkillQueries.filter((q) => q !== query))
-                                }}
-                            />
-                        </Grid>
-                    )
-                })}
+                {selectedCategory.id == STUDY_BUDDY_ID && <ChipGrid queries={studyBuddyQueries} colorClass={'info'} setQueries={setStudyBuddyQueries} />}
+                {selectedCategory.id == COFOUNDER_ID && <ChipGrid queries={cofounderInterestQueries} colorClass={'primary'} setQueries={setCofounderInterestQueries} />}
+                {selectedCategory.id == COFOUNDER_ID && <ChipGrid queries={cofounderSkillQueries} colorClass={'warning'} setQueries={setCofounderSkillQueries} />}
             </Grid>}
             {selectedCategory && selectedCategory.id == STUDY_BUDDY_ID &&
             <>
@@ -202,7 +127,7 @@ function SearchPage() {
                     <Typography variant="h6">To work on...</Typography>
                 </Grid>
             </Grid>
-            <Grid container>
+            <Grid container sx={{ width: '100%' }}>
                 <Grid item>
                     <TextField 
                       variant="outlined"
@@ -214,12 +139,7 @@ function SearchPage() {
                         "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
                           borderColor: theme.palette.customColors.info.hover,
                         },
-                        // "& .MuiSvgIcon-root.MuiIconButton-root:hover": {
-                        //     color: theme.palette.customColors.info.hover,
-                        // },
-                        //   "& .MuiSvgIcon-root.MuiIconButton-root:active": {
-                        //     color: theme.palette.customColors.info.hover,
-                        // }
+                        width: "100%",
                       }}
                       InputProps={{
                         endAdornment: (
@@ -348,6 +268,7 @@ function SearchPage() {
             </Grid>
             </>
             }
+            </div>
             {(studyBuddyQueries.length > 0 || cofounderSkillQueries.length > 0 || cofounderInterestQueries.length > 0) && 
             <>
                 <div style={{ 
@@ -411,7 +332,7 @@ function SearchPage() {
                                                     <Typography variant="h6" component="div">
                                                         {category[0].toUpperCase() + category.slice(1)}
                                                     </Typography>
-                                                    <Typography variant="subtitle1" component="div">
+                                                    <Typography variant="subtitle1" component="div" sx={{ paddingBottom: '8px' }}>
                                                         {studyBuddy[category]}
                                                     </Typography>
                                                 </div>
