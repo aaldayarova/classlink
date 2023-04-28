@@ -8,64 +8,64 @@ import { Search } from '@mui/icons-material'
 import Chip from '@mui/material/Chip'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
-import Box from '@mui/material/Box'
 import Avatar from '@mui/material/Avatar'
 import { Link } from 'react-router-dom'
+import { useTheme } from '@mui/material/styles'
+import { profiles } from '../constants/profiles'
+// import { ReactComponent as XIcon } from '../assets/icons/X.svg'
 
-const EMPTY_QUERY = { name: '', categoryId: -1 }
+import './SearchPage.css';
 
-// TODO: Add actual categories
+// Category type ids:
+const STUDY_BUDDY_ID = 1;
+const COFOUNDER_ID = 2;
+
 const categories = [
-    { id: 1, label: 'Food' },
-    { id: 2, label: 'Sports' },
-    { id: 3, label: 'Performing Arts' },
-    { id: 4, label: 'Technology' },
-]
-
-// TODO: Create actual storage for profiles
-const profiles = [
-    {
-        name: 'Aika Aldayarova',
-        pronouns: 'she/her',
-        house: 'Eliot',
-        year: '2024',
-        interests: {
-            4: ['Blockchain']
-        }
-    },
-    {
-        name: 'Olivia Wenzel',
-        pronouns: 'she/her',
-        house: 'Eliot',
-        year: '2024',
-        interests: {
-            1: ['Chicken', 'Tacos'],
-            2: ['Basketball'],
-        }
-    },
+    { id: STUDY_BUDDY_ID, label: 'Study buddy' },
+    { id: COFOUNDER_ID, label: 'Cofounder' },
 ]
 
 function SearchPage() {
     const [selectedCategory, setSelectedCategory] = useState()
-    const [currentQuery, setCurrentQuery] = useState(EMPTY_QUERY)
-    const [queries, setQueries] = useState([])
+
+    const [currentStudyBuddyQuery, setCurrentStudyBuddyQuery] = useState("")
+    const [currentCofounderInterestQuery, setCurrentCofounderInterestQuery] = useState("")
+    const [currentCofounderSkillQuery, setCurrentCofounderSkillQuery] = useState("")
+
+    const [studyBuddyQueries, setStudyBuddyQueries] = useState([])
+    const [cofounderInterestQueries, setCofounderInterestQueries] = useState([])
+    const [cofounderSkillQueries, setCofounderSkillQueries] = useState([])
+
+    const theme = useTheme();
 
     // This computes on every render, which is very inefficient.
     // TODO: Consider when/how to compute more efficiently...
-    const matchingProfiles = profiles.filter((profile) => {
-        for (let query of queries) {
-            const { name, categoryId } = query;
-            let profileCategory = profile.interests[categoryId];
 
-            if (profileCategory) {
-                if (profileCategory.includes(name)) {
-                    continue;
+    const matchingProfiles = selectedCategory ? profiles.filter((profile) => {
+        if (selectedCategory.id === STUDY_BUDDY_ID) {
+            for (let query of studyBuddyQueries) {
+                if (profile.studyBuddy.subjects.includes(query)) {
+                    continue
                 }
+                return false
             }
-            return false;
+            return true
+        } else {
+            for (let query of cofounderInterestQueries) {
+                if (profile.cofounder.interests.includes(query)) {
+                    continue
+                }
+                return false
+            }
+            for (let query of cofounderSkillQueries) {
+                if (profile.cofounder.skills.includes(query)) {
+                    continue
+                }
+                return false
+            }
+            return true
         }
-        return true;
-    })
+    }) : []
 
     return (
         <>
@@ -77,22 +77,33 @@ function SearchPage() {
                     </Link>
                 </Grid>
             </Grid>
-            <Grid container spacing={2}>
+            {/* justifyContent={'center'} */}
+            <Grid container spacing={2} >
                 <Grid item>
-                    <Typography variant="h3">"I want to find people by </Typography>
+                    <Typography sx={{ fontSize: "28px" }}>"I want to search for a </Typography>
                 </Grid>
                 <Grid item>
-                    {/*
-                    TODO: Consider adding categories for the dropdown, like the "With categories" example here: https://mui.com/material-ui/react-autocomplete/
-                    */}
                     <Autocomplete
+                      size={'small'}
                       defaultValue={null}
                       isOptionEqualToValue={(option, value) => option.id === value.id && option.name === value.name}
                       value={selectedCategory || null}
                       onChange={(_, newValue) => {
-                          setSelectedCategory(newValue)
+                        // If the category was changed, reset the queries and set a new category
+                        if (!selectedCategory || newValue.id !== selectedCategory.id) {
+                            setCurrentStudyBuddyQuery("")
+                            setCurrentCofounderInterestQuery("")
+                            setCurrentCofounderSkillQuery("")
+
+                            setStudyBuddyQueries([])
+                            setCofounderInterestQueries([])
+                            setCofounderSkillQueries([])
+
+                            setSelectedCategory(newValue)
+                        }
                       }}
                       disablePortal
+                      disableClearable
                       id="combo-box-demo"
                       options={categories}
                       sx={{ width: 300 }}
@@ -100,30 +111,167 @@ function SearchPage() {
                     />
                 </Grid>
                 <Grid item>
-                    <Typography variant="h3"> ..."</Typography>
+                    <Typography sx={{ fontSize: "28px" }}> "</Typography>
                 </Grid>
             </Grid>
-            <Grid container>
-                {queries.map((query, index) => {
+            {selectedCategory && <Grid container spacing={1} sx={{ paddingTop: '10px' }}>
+                {selectedCategory.id == STUDY_BUDDY_ID && studyBuddyQueries.map((query, index) => {
                     return (
                         <Grid item key={index}>
                             <Chip
-                                label={query.name}
+                                sx={{ 
+                                    backgroundColor: theme.palette.customColors.info.bg, 
+                                    border: `1px solid ${theme.palette.customColors.info.main}`, 
+                                    borderRadius: "50px", 
+                                    "& .MuiChip-deleteIcon": {
+                                        color: theme.palette.customColors.info.main,
+                                        "&:hover": {
+                                            color: theme.palette.customColors.info.hover // Change this value to adjust the color when hovering over the delete icon
+                                        },
+                                        "&:active": {
+                                            color: theme.palette.customColors.info.pressed // Change this value to adjust the color when clicking on the delete icon
+                                        }
+                                    },
+                                }}
+                                label={query}
+                                // deleteIcon={<XIcon style={{ fontSize: "0.5rem", color: theme.palette.customColors.info.hover, }} />}
                                 onDelete={() => {
-                                    setQueries(queries.filter((q) => !(q.name === query.name && q.categoryId === query.categoryId)))
+                                    setStudyBuddyQueries(studyBuddyQueries.filter((q) => q !== query))
                                 }}
                             />
                         </Grid>
                     )
                 })}
+                {selectedCategory.id == COFOUNDER_ID && cofounderInterestQueries.map((query, index) => {
+                    return (
+                        <Grid item key={index}>
+                            <Chip
+                                sx={{ 
+                                    backgroundColor: theme.palette.customColors.primary.bg, 
+                                    border: `1px solid ${theme.palette.customColors.primary.main}`, 
+                                    borderRadius: "50px", 
+                                    "& .MuiChip-deleteIcon": {
+                                        color: theme.palette.customColors.primary.main,
+                                        "&:hover": {
+                                            color: theme.palette.customColors.primary.hover // Change this value to adjust the color when hovering over the delete icon
+                                        },
+                                        "&:active": {
+                                            color: theme.palette.customColors.primary.pressed // Change this value to adjust the color when clicking on the delete icon
+                                        }
+                                    },
+                                }}
+                                label={query}
+                                onDelete={() => {
+                                    setCofounderInterestQueries(cofounderInterestQueries.filter((q) => q !== query))
+                                }}
+                            />
+                        </Grid>
+                    )
+                })}
+                {selectedCategory.id == COFOUNDER_ID && cofounderSkillQueries.map((query, index) => {
+                    return (
+                        <Grid item key={index}>
+                            <Chip
+                                sx={{ 
+                                    backgroundColor: theme.palette.customColors.warning.bg, 
+                                    border: `1px solid ${theme.palette.customColors.warning.main}`, 
+                                    borderRadius: "50px", 
+                                    "& .MuiChip-deleteIcon": {
+                                        color: theme.palette.customColors.warning.main,
+                                        "&:hover": {
+                                            color: theme.palette.customColors.warning.hover // Change this value to adjust the color when hovering over the delete icon
+                                        },
+                                        "&:active": {
+                                            color: theme.palette.customColors.warning.pressed // Change this value to adjust the color when clicking on the delete icon
+                                        }
+                                    },
+                                }}
+                                label={query}
+                                onDelete={() => {
+                                    setCofounderSkillQueries(cofounderSkillQueries.filter((q) => q !== query))
+                                }}
+                            />
+                        </Grid>
+                    )
+                })}
+            </Grid>}
+            {selectedCategory && selectedCategory.id == STUDY_BUDDY_ID &&
+            <>
+            <Grid container sx={{ paddingTop: '10px', paddingBottom: '8px' }}>
+                <Grid item>
+                    <Typography variant="h6">To work on...</Typography>
+                </Grid>
             </Grid>
-            {/* It might be jarring to completely remove the search box when a category isn't selected.
-            Alternatively, we can disable the text field when a category isn't selected. We'll need to play around
-            with styling though. */}
-            {selectedCategory && <Grid container>
+            <Grid container>
                 <Grid item>
                     <TextField 
                       variant="outlined"
+                      sx={{ 
+                        backgroundColor: theme.palette.customColors.info.bg, 
+                        "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": {
+                            borderColor: theme.palette.customColors.info.hover,
+                        },
+                        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                          borderColor: theme.palette.customColors.info.hover,
+                        },
+                        // "& .MuiSvgIcon-root.MuiIconButton-root:hover": {
+                        //     color: theme.palette.customColors.info.hover,
+                        // },
+                        //   "& .MuiSvgIcon-root.MuiIconButton-root:active": {
+                        //     color: theme.palette.customColors.info.hover,
+                        // }
+                      }}
+                      InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="start">
+                                {/* sx={{ "&:hover": { color: theme.palette.customColors.info.hover }, "&:active": { color: theme.palette.customColors.info.hover } }} */}
+                                <Search />
+                            </InputAdornment>
+                        )
+                      }}
+                      value={currentStudyBuddyQuery}
+                      onChange={(event) => {
+                        setCurrentStudyBuddyQuery(event.target.value)
+                      }}
+                      onKeyDown={(event) => {
+                        if (event.key === 'Enter') {
+                            event.preventDefault()
+
+                            const trimmed = currentStudyBuddyQuery.trim()
+                            
+                            // If the search box isn't empty & contains an element that hasn't already been searched, then add it to the list of saved queries
+                            if (trimmed !== '' && !(studyBuddyQueries.includes(trimmed))) { // prevent duplicates
+                                setStudyBuddyQueries([...studyBuddyQueries, trimmed])
+                            }
+                            // Clear the search box
+                            setCurrentStudyBuddyQuery("")
+                        }
+                      }}
+                    />
+                </Grid>
+            </Grid>
+            </>
+            }
+            {selectedCategory && selectedCategory.id == COFOUNDER_ID &&
+            <>
+            <Grid container sx={{ paddingTop: '10px', paddingBottom: '8px' }}>
+                <Grid item>
+                    <Typography variant="h6">Who is interested in...</Typography>
+                </Grid>
+            </Grid>
+            <Grid container sx={{ paddingBottom: '10px' }}>
+                <Grid item>
+                    <TextField 
+                      variant="outlined"
+                      sx={{ 
+                        backgroundColor: theme.palette.customColors.primary.bg, 
+                        "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": {
+                            borderColor: theme.palette.customColors.primary.hover,
+                        },
+                        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                          borderColor: theme.palette.customColors.primary.hover,
+                        },
+                      }}
                       InputProps={{
                         startAdornment: (
                             <InputAdornment position="start">
@@ -131,50 +279,214 @@ function SearchPage() {
                             </InputAdornment>
                         )
                       }}
-                      value={currentQuery.name}
+                      value={currentCofounderInterestQuery}
                       onChange={(event) => {
-                        setCurrentQuery({
-                            name: event.target.value,
-                            categoryId: selectedCategory.id
-                        })
+                        setCurrentCofounderInterestQuery(event.target.value)
                       }}
                       onKeyDown={(event) => {
                         if (event.key === 'Enter') {
                             event.preventDefault()
+
+                            const trimmed = currentCofounderInterestQuery.trim()
                             
                             // If the search box isn't empty & contains an element that hasn't already been searched, then add it to the list of saved queries
-                            if (currentQuery.name.trim() !== '' && !(queries.find((query) => query.name === currentQuery.name && query.categoryId === currentQuery.categoryId))) { // prevent duplicates
-                                setQueries([...queries, currentQuery])
+                            if (trimmed !== '' && !(cofounderInterestQueries.includes(trimmed))) { // prevent duplicates
+                                setCofounderInterestQueries([...cofounderInterestQueries, trimmed])
                             }
                             // Clear the search box
-                            setCurrentQuery(EMPTY_QUERY)
+                            setCurrentCofounderInterestQuery("")
                         }
                       }}
                     />
                 </Grid>
-            </Grid>}
-            <hr />
-            {queries.length > 0 && 
+            </Grid>
+            <Grid container sx={{ paddingBottom: '8px' }}>
+                <Grid item>
+                    <Typography variant="h6">Who is skilled in...</Typography>
+                </Grid>
+            </Grid>
+            <Grid container>
+                <Grid item>
+                    <TextField 
+                      variant="outlined"
+                      sx={{ 
+                        backgroundColor: theme.palette.customColors.warning.bg, 
+                        "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": {
+                            borderColor: theme.palette.customColors.warning.hover,
+                        },
+                        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                          borderColor: theme.palette.customColors.warning.hover,
+                        },
+                      }}
+                      InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <Search />
+                            </InputAdornment>
+                        )
+                      }}
+                      value={currentCofounderSkillQuery}
+                      onChange={(event) => {
+                        setCurrentCofounderSkillQuery(event.target.value)
+                      }}
+                      onKeyDown={(event) => {
+                        if (event.key === 'Enter') {
+                            event.preventDefault()
+
+                            const trimmed = currentCofounderSkillQuery.trim()
+                            
+                            // If the search box isn't empty & contains an element that hasn't already been searched, then add it to the list of saved queries
+                            if (trimmed !== '' && !(cofounderSkillQueries.includes(trimmed))) { // prevent duplicates
+                                setCofounderSkillQueries([...cofounderSkillQueries, trimmed])
+                            }
+                            // Clear the search box
+                            setCurrentCofounderSkillQuery("")
+                        }
+                      }}
+                    />
+                </Grid>
+            </Grid>
+            </>
+            }
+            {(studyBuddyQueries.length > 0 || cofounderSkillQueries.length > 0 || cofounderInterestQueries.length > 0) && 
             <>
-                <Box sx={{ display: 'inline-block', transform: 'scale(0.8)' }}>
-                    <Card>
-                        <CardContent>
-                            <Typography variant="body1">
-                                Found {matchingProfiles.length} {matchingProfiles.length === 1 ? 'person' : 'people'}
-                            </Typography>
-                        </CardContent>
-                    </Card>
-                </Box>
+                <div style={{ 
+                    border: `2px solid ${theme.palette.customColors.success.border}`, 
+                    boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.1)", 
+                    borderRadius: "4px", 
+                    background: theme.palette.customColors.success.bg,
+                    display: "inline-block",
+                    padding: "6px",
+                    marginTop: "20px",
+                    marginBottom: "8px",
+                    color: theme.palette.customColors.neutral[70],
+                }}>
+                    <Typography variant="subtitle2" component="div"> Found {matchingProfiles.length} {matchingProfiles.length === 1 ? 'person' : 'people'}</Typography>
+                </div>
                 <Grid container spacing={2}>
                     {matchingProfiles.map((profile, index) => {
+                        const { name, pronouns, house, year, concentration, studyBuddy, cofounder } = profile;
+
                         return (
                             <Grid item key={index}>
-                                {/* TODO: Add more of profile to card */}
-                                <Card>
-                                    <CardContent>
-                                        <Typography variant="h5" component="div">
-                                            {profile.name}
+                                <Card sx={{ width: '300px' }}>
+                                <CardContent sx={{
+                                    position: 'relative',
+                                    '&:hover::before': {
+                                      content: '""',
+                                      position: 'absolute',
+                                      top: 0,
+                                      left: 0,
+                                      width: '100%',
+                                      height: '100%',
+                                      backgroundColor: 'rgba(0, 0, 0, 0.75)',
+                                      display: 'flex',
+                                      justifyContent: 'center',
+                                      alignItems: 'center',
+                                      zIndex: 1,
+                                      overflow: 'auto',
+                                    },
+                                    '.hover-content': {
+                                        position: 'absolute',
+                                        visibility: 'hidden',
+                                        top: "50%",
+                                        left: "50%",
+                                        transform: "translate(-50%, -50%)",
+                                        zIndex: 2,
+                                        textAlign: 'center',
+                                        color: 'white',
+                                        maxHeight: '80vh',
+                                        overflow: 'auto',
+                                        width: '90%',
+                                        height: '90%',
+                                    },
+                                    '&:hover > .hover-content': {
+                                        visibility: 'visible',
+                                        overflowY: 'auto',
+                                    }
+                                }}>
+                                        <div className="hover-content">
+                                            {selectedCategory.id == STUDY_BUDDY_ID && ['goals', 'purpose', 'frequency'].map((category, index) => {
+                                                return <div key={index}>
+                                                    <Typography variant="h6" component="div">
+                                                        {category[0].toUpperCase() + category.slice(1)}
+                                                    </Typography>
+                                                    <Typography variant="subtitle1" component="div">
+                                                        {studyBuddy[category]}
+                                                    </Typography>
+                                                </div>
+                                            })}
+                                            {selectedCategory.id == COFOUNDER_ID && <div>
+                                                    <Typography variant="h6" component="div">
+                                                        Timing
+                                                    </Typography>
+                                                    <Typography variant="subtitle1" component="div">
+                                                        {cofounder["timing"]}
+                                                    </Typography>
+                                                </div>}
+                                        </div>
+                                        <div style={{ textAlign: 'center', paddingBottom: '10px' }}>
+                                            <div style={{ textAlign: 'center', paddingBottom: '6px', justifyContent: 'center', display: 'flex' }}>
+                                                <Avatar alt="Your Profile">{name[0]}</Avatar>
+                                            </div>
+                                            <Typography variant="h6" component="div">
+                                                {name}
+                                            </Typography>
+                                            <Typography variant="caption" component="div">
+                                                {pronouns}
+                                            </Typography>
+                                            <Typography variant="subtitle2" component="div">
+                                                {house}, {year}, {concentration}
+                                            </Typography>
+                                        </div>
+                                        <Typography variant="body2" component="div" sx={{ paddingBottom: '10px' }}>
+                                            {selectedCategory.id == STUDY_BUDDY_ID && 'Is interested in working on...'}
+                                            {selectedCategory.id == COFOUNDER_ID && 'Is interested & skilled in...'}
                                         </Typography>
+                                        <Grid container spacing={1}>
+                                            {selectedCategory.id == STUDY_BUDDY_ID && studyBuddy.subjects.map((interest, index) => {
+                                                return (
+                                                    <Grid item key={index}>
+                                                        <Chip
+                                                            label={interest}
+                                                            sx={{
+                                                                backgroundColor: theme.palette.customColors.info.bg,
+                                                                border: `1px solid ${theme.palette.customColors.info.main}`, 
+                                                                borderRadius: "50px", 
+                                                            }}
+                                                        />
+                                                    </Grid>
+                                                )
+                                            })}
+                                            {selectedCategory.id == COFOUNDER_ID && cofounder.interests.map((interest, index) => {
+                                                return (
+                                                    <Grid item key={index}>
+                                                        <Chip
+                                                            label={interest}
+                                                            sx={{ 
+                                                                backgroundColor: theme.palette.customColors.primary.bg, 
+                                                                border: `1px solid ${theme.palette.customColors.primary.main}`, 
+                                                                borderRadius: "50px", 
+                                                            }}
+                                                        />
+                                                    </Grid>
+                                                )
+                                            })}
+                                            {selectedCategory.id == COFOUNDER_ID && cofounder.skills.map((skill, index) => {
+                                                return (
+                                                    <Grid item key={index}>
+                                                        <Chip
+                                                            label={skill}
+                                                            sx={{
+                                                                backgroundColor: theme.palette.customColors.warning.bg,
+                                                                border: `1px solid ${theme.palette.customColors.warning.main}`, 
+                                                                borderRadius: "50px", 
+                                                            }}
+                                                        />
+                                                    </Grid>
+                                                )
+                                            })}
+                                        </Grid>
                                     </CardContent>
                                 </Card>
                             </Grid>
