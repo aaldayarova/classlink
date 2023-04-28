@@ -5,7 +5,7 @@ import { Search } from '@mui/icons-material'
 import { InputAdornment } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
-function DecoratedTextField({ paddingTop = '10px', paddingBottom = '8px', label, colorClass, currentQuery, setCurrentQuery, queries, setQueries }) {
+function DecoratedTextField({ paddingTop = '10px', paddingBottom = '8px', placeholder, label, colorClass, currentQuery, setCurrentQuery, queries, setQueries }) {
     const theme = useTheme();
     
     return (
@@ -18,6 +18,7 @@ function DecoratedTextField({ paddingTop = '10px', paddingBottom = '8px', label,
             <Grid container>
                 <Grid item>
                     <TextField 
+                      placeholder={placeholder}
                       variant="outlined"
                       sx={{ 
                         backgroundColor: theme.palette.customColors[colorClass].bg, 
@@ -46,11 +47,21 @@ function DecoratedTextField({ paddingTop = '10px', paddingBottom = '8px', label,
                             event.preventDefault()
 
                             const trimmed = currentQuery.trim()
-                            
-                            // If the search box isn't empty & contains an element that hasn't already been searched, then add it to the list of saved queries
-                            if (trimmed !== '' && !(queries.includes(trimmed))) { // prevent duplicates
-                                setQueries([...queries, trimmed])
+                            const items = trimmed.split(',')
+
+                            const newQueries = []
+
+                            for (let item of items) {
+                              // If the search box isn't empty & contains an element that hasn't already been searched, then add it to the list of saved queries
+                              if (item !== '' && !(queries.includes(item))) { // prevent duplicates
+                                newQueries.push(item)
+                              }
                             }
+                            
+                            if (newQueries.length > 0) {
+                              setQueries([...queries, ...newQueries])
+                            }
+
                             // Clear the search box
                             setCurrentQuery("")
                         }

@@ -67,14 +67,14 @@ function SearchPage() {
 
     return (
         <>
-            {/* TODO: Add profile photo */}
-            <Grid container justifyContent="flex-end">
-                <Grid item>
-                    <Link to='/profile' style={{ textDecoration: 'none' }}>
-                        <Avatar alt="Your Profile">P</Avatar>
-                    </Link>
-                </Grid>
+        {/* TODO: Add profile photo */}
+        <Grid container justifyContent="flex-end">
+            <Grid item>
+                <Link to='/profile' style={{ textDecoration: 'none' }}>
+                    <Avatar alt="Your Profile">P</Avatar>
+                </Link>
             </Grid>
+        </Grid>
         <div style={{ width: '950px', margin: 'auto' }}>
             <Grid container spacing={2}>
                 <Grid item>
@@ -117,11 +117,11 @@ function SearchPage() {
                 {selectedCategory.id == COFOUNDER_ID && <ChipGrid queries={cofounderInterestQueries} colorClass={'primary'} setQueries={setCofounderInterestQueries} />}
                 {selectedCategory.id == COFOUNDER_ID && <ChipGrid queries={cofounderSkillQueries} colorClass={'warning'} setQueries={setCofounderSkillQueries} />}
             </Grid>}
-            {selectedCategory && selectedCategory.id == STUDY_BUDDY_ID && <DecoratedTextField label={'To work on...'} colorClass={'info'} currentQuery={currentStudyBuddyQuery} setCurrentQuery={setCurrentStudyBuddyQuery} queries={studyBuddyQueries} setQueries={setStudyBuddyQueries}/>}
+            {selectedCategory && selectedCategory.id == STUDY_BUDDY_ID && <DecoratedTextField label={'To work on...'} placeholder={"CS 178, Parallel Processing, English Literature"} colorClass={'info'} currentQuery={currentStudyBuddyQuery} setCurrentQuery={setCurrentStudyBuddyQuery} queries={studyBuddyQueries} setQueries={setStudyBuddyQueries}/>}
             {selectedCategory && selectedCategory.id == COFOUNDER_ID &&
             <>
-                <DecoratedTextField label={'Who is interested in...'} colorClass={'primary'} currentQuery={currentCofounderInterestQuery} setCurrentQuery={setCurrentCofounderInterestQuery} queries={cofounderInterestQueries} setQueries={setCofounderInterestQueries}/>
-                <DecoratedTextField paddingTop='10px' label={'Who is skilled in...'} colorClass={'warning'} currentQuery={currentCofounderSkillQuery} setCurrentQuery={setCurrentCofounderSkillQuery} queries={cofounderSkillQueries} setQueries={setCofounderSkillQueries}/>
+                <DecoratedTextField label={'Who is interested in...'} placeholder={"Science, Therapeutics, Alzheimer's Disease"} colorClass={'primary'} currentQuery={currentCofounderInterestQuery} setCurrentQuery={setCurrentCofounderInterestQuery} queries={cofounderInterestQueries} setQueries={setCofounderInterestQueries}/>
+                <DecoratedTextField paddingTop='10px' label={'Who is skilled in...'} placeholder={"Robotics, Volunteer Management, Python, Sketching"} colorClass={'warning'} currentQuery={currentCofounderSkillQuery} setCurrentQuery={setCurrentCofounderSkillQuery} queries={cofounderSkillQueries} setQueries={setCofounderSkillQueries}/>
             </>
             }
             {(studyBuddyQueries.length > 0 || cofounderSkillQueries.length > 0 || cofounderInterestQueries.length > 0) && 
