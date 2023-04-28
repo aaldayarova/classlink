@@ -113,7 +113,7 @@ function SearchPage() {
             {selectedCategory && selectedCategory.id == COFOUNDER_ID &&
             <>
                 <DecoratedTextField label={'Who is interested in...'} colorClass={'primary'} currentQuery={currentCofounderInterestQuery} setCurrentQuery={setCurrentCofounderInterestQuery} queries={cofounderInterestQueries} setQueries={setCofounderInterestQueries}/>
-                <DecoratedTextField paddingTop='0px' label={'Who is skilled in...'} colorClass={'warning'} currentQuery={currentCofounderSkillQuery} setCurrentQuery={setCurrentCofounderSkillQuery} queries={cofounderSkillQueries} setQueries={setCofounderSkillQueries}/>
+                <DecoratedTextField paddingTop='10px' label={'Who is skilled in...'} colorClass={'warning'} currentQuery={currentCofounderSkillQuery} setCurrentQuery={setCurrentCofounderSkillQuery} queries={cofounderSkillQueries} setQueries={setCofounderSkillQueries}/>
             </>
             }
             {(studyBuddyQueries.length > 0 || cofounderSkillQueries.length > 0 || cofounderInterestQueries.length > 0) && 
