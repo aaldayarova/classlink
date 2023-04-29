@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Typography from '@mui/material/Typography'
 import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
@@ -15,12 +15,12 @@ import ProfileCard from '../components/ProfileCard'
 
 import './SearchPage.css';
 
-function toLowerCaseNoSpaces(str) {
+export function toLowerCaseNoSpaces(str) {
     return str.toLowerCase().replace(' ', '')
 }
 
-function includesQuery(strings, query) {
-    return strings.map((str) => toLowerCaseNoSpaces(str)).includes(toLowerCaseNoSpaces(query))
+export function findQuery(strings, query) {
+    return strings.map((str) => toLowerCaseNoSpaces(str)).find((str) => str == toLowerCaseNoSpaces(query))
 }
 
 function SearchPage() {
@@ -34,6 +34,10 @@ function SearchPage() {
     const [cofounderInterestQueries, setCofounderInterestQueries] = useState([])
     const [cofounderSkillQueries, setCofounderSkillQueries] = useState([])
 
+    const [duplicateStudyBuddyQueries, setDuplicateStudyBuddyQueries] = useState([])
+    const [duplicateCofounderInterestQueries, setDuplicateCofounderInterestQueries] = useState([])
+    const [duplicateCofounderSkillQueries, setDuplicateCofounderSkillQueries] = useState([])
+
     const theme = useTheme();
 
     // This computes on every render, which is very inefficient.
@@ -42,7 +46,7 @@ function SearchPage() {
     const matchingProfiles = selectedCategory ? profiles.filter((profile) => {
         if (selectedCategory.id === STUDY_BUDDY_ID) {
             for (let query of studyBuddyQueries) {
-                if (includesQuery(profile.studyBuddy.subjects, query)) {
+                if (findQuery(profile.studyBuddy.subjects, query)) {
                     continue
                 }
                 return false
@@ -50,13 +54,13 @@ function SearchPage() {
             return true
         } else {
             for (let query of cofounderInterestQueries) {
-                if (includesQuery(profile.cofounder.interests, query)) {
+                if (findQuery(profile.cofounder.interests, query)) {
                     continue
                 }
                 return false
             }
             for (let query of cofounderSkillQueries) {
-                if (includesQuery(profile.cofounder.skills, query)) {
+                if (findQuery(profile.cofounder.skills, query)) {
                     continue
                 }
                 return false
@@ -113,15 +117,15 @@ function SearchPage() {
                 </Grid>
             </Grid>
             {selectedCategory && <Grid container spacing={1} sx={{ paddingTop: '10px' }}>
-                {selectedCategory.id == STUDY_BUDDY_ID && <ChipGrid queries={studyBuddyQueries} colorClass={'info'} setQueries={setStudyBuddyQueries} />}
-                {selectedCategory.id == COFOUNDER_ID && <ChipGrid queries={cofounderInterestQueries} colorClass={'primary'} setQueries={setCofounderInterestQueries} />}
-                {selectedCategory.id == COFOUNDER_ID && <ChipGrid queries={cofounderSkillQueries} colorClass={'warning'} setQueries={setCofounderSkillQueries} />}
+                {selectedCategory.id == STUDY_BUDDY_ID && <ChipGrid queries={studyBuddyQueries} duplicateQueries={duplicateStudyBuddyQueries} colorClass={'info'} setQueries={setStudyBuddyQueries} />}
+                {selectedCategory.id == COFOUNDER_ID && <ChipGrid queries={cofounderInterestQueries} duplicateQueries={duplicateCofounderInterestQueries} colorClass={'primary'} setQueries={setCofounderInterestQueries} />}
+                {selectedCategory.id == COFOUNDER_ID && <ChipGrid queries={cofounderSkillQueries} duplicateQueries={duplicateCofounderSkillQueries} colorClass={'warning'} setQueries={setCofounderSkillQueries} />}
             </Grid>}
-            {selectedCategory && selectedCategory.id == STUDY_BUDDY_ID && <DecoratedTextField label={'To work on...'} placeholder={"CS 178, Parallel Processing, English Literature"} colorClass={'info'} currentQuery={currentStudyBuddyQuery} setCurrentQuery={setCurrentStudyBuddyQuery} queries={studyBuddyQueries} setQueries={setStudyBuddyQueries}/>}
+            {selectedCategory && selectedCategory.id == STUDY_BUDDY_ID && <DecoratedTextField label={'To work on...'} placeholder={"CS 178, Parallel Processing, English Literature"} setDuplicateQueries={setDuplicateStudyBuddyQueries} colorClass={'info'} currentQuery={currentStudyBuddyQuery} setCurrentQuery={setCurrentStudyBuddyQuery} queries={studyBuddyQueries} setQueries={setStudyBuddyQueries}/>}
             {selectedCategory && selectedCategory.id == COFOUNDER_ID &&
             <>
-                <DecoratedTextField label={'Who is interested in...'} placeholder={"Science, Therapeutics, Alzheimer's Disease"} colorClass={'primary'} currentQuery={currentCofounderInterestQuery} setCurrentQuery={setCurrentCofounderInterestQuery} queries={cofounderInterestQueries} setQueries={setCofounderInterestQueries}/>
-                <DecoratedTextField paddingTop='10px' label={'Who is skilled in...'} placeholder={"Robotics, Volunteer Management, Python, Sketching"} colorClass={'warning'} currentQuery={currentCofounderSkillQuery} setCurrentQuery={setCurrentCofounderSkillQuery} queries={cofounderSkillQueries} setQueries={setCofounderSkillQueries}/>
+                <DecoratedTextField label={'Who is interested in...'} placeholder={"Science, Therapeutics, Alzheimer's Disease"} setDuplicateQueries={setDuplicateCofounderSkillQueries} colorClass={'primary'} currentQuery={currentCofounderInterestQuery} setCurrentQuery={setCurrentCofounderInterestQuery} queries={cofounderInterestQueries} setQueries={setCofounderInterestQueries}/>
+                <DecoratedTextField paddingTop='10px' label={'Who is skilled in...'} placeholder={"Robotics, Volunteer Management, Python, Sketching"} setDuplicateQueries={setDuplicateCofounderInterestQueries} colorClass={'warning'} currentQuery={currentCofounderSkillQuery} setCurrentQuery={setCurrentCofounderSkillQuery} queries={cofounderSkillQueries} setQueries={setCofounderSkillQueries}/>
             </>
             }
             {(studyBuddyQueries.length > 0 || cofounderSkillQueries.length > 0 || cofounderInterestQueries.length > 0) && 

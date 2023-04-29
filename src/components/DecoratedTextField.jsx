@@ -1,75 +1,111 @@
+import { useState } from 'react'
 import Grid from '@mui/material/Grid'
 import TextField from '@mui/material/TextField'
+import Button from '@mui/material/Button'
+import Snackbar from '@mui/material/Snackbar'
+import Alert from '@mui/material/Alert'
 import Typography from '@mui/material/Typography'
 import { Search } from '@mui/icons-material'
 import { InputAdornment } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
+import { findQuery } from '../pages/SearchPage'
 
-function DecoratedTextField({ paddingTop = '10px', paddingBottom = '8px', placeholder, label, colorClass, currentQuery, setCurrentQuery, queries, setQueries }) {
+function DecoratedTextField({ paddingTop = '10px', paddingBottom = '8px', placeholder, label, colorClass, currentQuery, setCurrentQuery, queries, setQueries, setDuplicateQueries }) {
     const theme = useTheme();
+
+    const [snackBarQueries, setSnackbarQueries] = useState([])
+
+    console.log('queries', queries)
+
+    const handleClose = (_, reason) => {
+      if (reason === 'clickaway') {
+        return
+      }
+
+      setSnackbarQueries([])
+    }
     
     return (
-        <>
-            <Grid container sx={{ paddingTop: paddingTop, paddingBottom: paddingBottom }}>
-                <Grid item>
-                    <Typography variant="h6">{label}</Typography>
-                </Grid>
+      <>
+        {/* TODO: Actually add new queries to profile & add undo button functionality */}
+        <Snackbar open={snackBarQueries.length > 0} autoHideDuration={6000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="info" sx={{ width: '100%' }}>
+            <div>We added {snackBarQueries.map((query) => `"${query}"`).join(', ')} to your profile!</div>
+            <Button size="small" color="error">Undo</Button>
+          </Alert>
+        </Snackbar>
+        <Grid container sx={{ paddingTop: paddingTop, paddingBottom: paddingBottom }}>
+            <Grid item>
+                <Typography variant="h6">{label}</Typography>
             </Grid>
-            <Grid container>
-                <Grid item>
-                    <TextField 
-                      placeholder={placeholder}
-                      variant="outlined"
-                      sx={{ 
-                        backgroundColor: theme.palette.customColors[colorClass].bg, 
-                        "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": {
-                            borderColor: theme.palette.customColors[colorClass].hover,
-                        },
-                        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                          borderColor: theme.palette.customColors[colorClass].hover,
-                        },
-                        width: "930px",
-                      }}
-                      InputProps={{
-                        endAdornment: (
-                            <InputAdornment position="start">
-                                {/* sx={{ "&:hover": { color: theme.palette.customColors.info.hover }, "&:active": { color: theme.palette.customColors.info.hover } }} */}
-                                <Search />
-                            </InputAdornment>
-                        )
-                      }}
-                      value={currentQuery}
-                      onChange={(event) => {
-                        setCurrentQuery(event.target.value)
-                      }}
-                      onKeyDown={(event) => {
-                        if (event.key === 'Enter') {
-                            event.preventDefault()
+        </Grid>
+        <Grid container>
+            <Grid item>
+                <TextField 
+                  placeholder={placeholder}
+                  variant="outlined"
+                  sx={{ 
+                    backgroundColor: theme.palette.customColors[colorClass].bg, 
+                    "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline": {
+                        borderColor: theme.palette.customColors[colorClass].hover,
+                    },
+                    "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                      borderColor: theme.palette.customColors[colorClass].hover,
+                    },
+                    width: "930px",
+                  }}
+                  InputProps={{
+                    endAdornment: (
+                        <InputAdornment position="start">
+                            {/* sx={{ "&:hover": { color: theme.palette.customColors.info.hover }, "&:active": { color: theme.palette.customColors.info.hover } }} */}
+                            <Search />
+                        </InputAdornment>
+                    )
+                  }}
+                  value={currentQuery}
+                  onChange={(event) => {
+                    setCurrentQuery(event.target.value)
+                  }}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter') {
+                        event.preventDefault()
 
-                            const trimmed = currentQuery.trim()
-                            const items = trimmed.split(',')
+                        // reset duplicate queries
+                        setDuplicateQueries([])
 
-                            const newQueries = []
+                        const items = currentQuery.split(',').map((item) => item.trim())
 
-                            for (let item of items) {
-                              // If the search box isn't empty & contains an element that hasn't already been searched, then add it to the list of saved queries
-                              if (item !== '' && !(queries.includes(item))) { // prevent duplicates
-                                newQueries.push(item)
-                              }
-                            }
-                            
-                            if (newQueries.length > 0) {
-                              setQueries([...queries, ...newQueries])
-                            }
+                        const newQueries = []
+                        const duplicateQueries = []
 
-                            // Clear the search box
-                            setCurrentQuery("")
+                        for (let item of items) {
+                          const duplicateQuery = findQuery(queries, item)
+                          if (duplicateQuery) {
+                            duplicateQueries.push(duplicateQuery)
+                          }
+                          // If the search box isn't empty & contains an element that hasn't already been searched, then add it to the list of saved queries
+                          else if (item !== '' && findQuery(newQueries, item) === undefined) { // prevent duplicates
+                            newQueries.push(item)
+                          }
                         }
-                      }}
-                    />
-                </Grid>
+
+                        if (duplicateQueries.length > 0) {
+                          setDuplicateQueries(duplicateQueries)
+                        }
+                        
+                        if (newQueries.length > 0) {
+                          setQueries([...queries, ...newQueries])
+                          setSnackbarQueries(newQueries)
+                        }
+
+                        // Clear the search box
+                        setCurrentQuery("")
+                    }
+                  }}
+                />
             </Grid>
-        </>
+        </Grid>
+      </>
     )
 }
 
