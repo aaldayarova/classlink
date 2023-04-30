@@ -29,7 +29,11 @@ function DecoratedTextField({ paddingTop = '10px', paddingBottom = '8px', placeh
       let user = JSON.parse(localStorage.getItem('userData'))
       console.log(user)
       if (user[localStorageOuterKey] && user[localStorageOuterKey][localStorageInnerKey]) {
-        user[localStorageOuterKey][localStorageInnerKey].push(...queries)
+        queries.forEach((query) => {
+          if (findQuery(user[localStorageOuterKey][localStorageInnerKey], query) === undefined) {
+            user[localStorageOuterKey][localStorageInnerKey].push(query)
+          }
+        })
       } else {
         user[localStorageOuterKey] = {
           [localStorageInnerKey]: queries
