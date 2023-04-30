@@ -13,8 +13,6 @@ import DecoratedTextField from '../components/DecoratedTextField'
 import { STUDY_BUDDY_ID, COFOUNDER_ID, categories } from '../constants/ids'
 import ProfileCard from '../components/ProfileCard'
 
-import './SearchPage.css';
-
 export function toLowerCaseNoSpaces(str) {
     return str.toLowerCase().replace(' ', '')
 }
@@ -38,7 +36,7 @@ function SearchPage() {
     const [duplicateCofounderInterestQueries, setDuplicateCofounderInterestQueries] = useState([])
     const [duplicateCofounderSkillQueries, setDuplicateCofounderSkillQueries] = useState([])
 
-    const theme = useTheme();
+    const theme = useTheme()
 
     // This computes on every render, which is very inefficient.
     // TODO: Consider when/how to compute more efficiently...
@@ -121,11 +119,11 @@ function SearchPage() {
                 {selectedCategory.id == COFOUNDER_ID && <ChipGrid queries={cofounderInterestQueries} duplicateQueries={duplicateCofounderInterestQueries} colorClass={'primary'} setQueries={setCofounderInterestQueries} />}
                 {selectedCategory.id == COFOUNDER_ID && <ChipGrid queries={cofounderSkillQueries} duplicateQueries={duplicateCofounderSkillQueries} colorClass={'warning'} setQueries={setCofounderSkillQueries} />}
             </Grid>}
-            {selectedCategory && selectedCategory.id == STUDY_BUDDY_ID && <DecoratedTextField label={'To work on...'} placeholder={"CS 178, Parallel Processing, English Literature"} setDuplicateQueries={setDuplicateStudyBuddyQueries} colorClass={'info'} currentQuery={currentStudyBuddyQuery} setCurrentQuery={setCurrentStudyBuddyQuery} queries={studyBuddyQueries} setQueries={setStudyBuddyQueries}/>}
+            {selectedCategory && selectedCategory.id == STUDY_BUDDY_ID && <DecoratedTextField label={'To work on...'} placeholder={"CS 178, Parallel Processing, English Literature"} setDuplicateQueries={setDuplicateStudyBuddyQueries} colorClass={'info'} currentQuery={currentStudyBuddyQuery} setCurrentQuery={setCurrentStudyBuddyQuery} queries={studyBuddyQueries} setQueries={setStudyBuddyQueries} localStorageOuterKey={'studyBuddy'} localStorageInnerKey={'subjects'} profileLabel={'study buddy subjects'}/>}
             {selectedCategory && selectedCategory.id == COFOUNDER_ID &&
             <>
-                <DecoratedTextField label={'Who is interested in...'} placeholder={"Science, Therapeutics, Alzheimer's Disease"} setDuplicateQueries={setDuplicateCofounderSkillQueries} colorClass={'primary'} currentQuery={currentCofounderInterestQuery} setCurrentQuery={setCurrentCofounderInterestQuery} queries={cofounderInterestQueries} setQueries={setCofounderInterestQueries}/>
-                <DecoratedTextField paddingTop='10px' label={'Who is skilled in...'} placeholder={"Robotics, Volunteer Management, Python, Sketching"} setDuplicateQueries={setDuplicateCofounderInterestQueries} colorClass={'warning'} currentQuery={currentCofounderSkillQuery} setCurrentQuery={setCurrentCofounderSkillQuery} queries={cofounderSkillQueries} setQueries={setCofounderSkillQueries}/>
+                <DecoratedTextField label={'Who is interested in...'} placeholder={"Science, Therapeutics, Alzheimer's Disease"} setDuplicateQueries={setDuplicateCofounderSkillQueries} colorClass={'primary'} currentQuery={currentCofounderInterestQuery} setCurrentQuery={setCurrentCofounderInterestQuery} queries={cofounderInterestQueries} setQueries={setCofounderInterestQueries} localStorageOuterKey={'cofounder'} localStorageInnerKey={'interests'} profileLabel={'cofounder interests'} />
+                <DecoratedTextField paddingTop='10px' label={'Who is skilled in...'} placeholder={"Robotics, Volunteer Management, Python, Sketching"} setDuplicateQueries={setDuplicateCofounderInterestQueries} colorClass={'warning'} currentQuery={currentCofounderSkillQuery} setCurrentQuery={setCurrentCofounderSkillQuery} queries={cofounderSkillQueries} setQueries={setCofounderSkillQueries} localStorageOuterKey={'cofounder'} localStorageInnerKey={'skills'} profileLabel={'cofounder skills'} />
             </>
             }
             {(studyBuddyQueries.length > 0 || cofounderSkillQueries.length > 0 || cofounderInterestQueries.length > 0) && 
