@@ -10,7 +10,7 @@ import { InputAdornment } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import { findQuery } from '../pages/SearchPage'
 
-function DecoratedTextField({ paddingTop = '10px', paddingBottom = '8px', placeholder, label, colorClass, currentQuery, setCurrentQuery, queries, setQueries, setDuplicateQueries }) {
+function DecoratedTextField({ paddingTop = '10px', paddingBottom = '8px', placeholder, label, colorClass, currentQuery, setCurrentQuery, queries, setQueries, setDuplicateQueries, localStorageOuterKey, localStorageInnerKey, profileLabel }) {
     const theme = useTheme();
 
     const [snackBarQueries, setSnackbarQueries] = useState([])
@@ -24,14 +24,37 @@ function DecoratedTextField({ paddingTop = '10px', paddingBottom = '8px', placeh
 
       setSnackbarQueries([])
     }
+
+    const addToProfile = (queries) => {
+      let user = JSON.parse(localStorage.getItem('userData'))
+      console.log(user)
+      if (user[localStorageOuterKey] && user[localStorageOuterKey][localStorageInnerKey]) {
+        queries.forEach((query) => {
+          if (findQuery(user[localStorageOuterKey][localStorageInnerKey], query) === undefined) {
+            user[localStorageOuterKey][localStorageInnerKey].push(query)
+          }
+        })
+      } else {
+        user[localStorageOuterKey] = {
+          [localStorageInnerKey]: queries
+        }
+      }
+      localStorage.setItem('userData', JSON.stringify(user))
+    }
+
+    const removeFromProfile = () => {
+      let user = JSON.parse(localStorage.getItem('userData'))
+      user[localStorageOuterKey][localStorageInnerKey] = user[localStorageOuterKey][localStorageInnerKey].filter((item) => !snackBarQueries.includes(item))
+      localStorage.setItem('userData', JSON.stringify(user))
+    }
     
     return (
       <>
         {/* TODO: Actually add new queries to profile & add undo button functionality */}
         <Snackbar open={snackBarQueries.length > 0} autoHideDuration={6000} onClose={handleClose}>
           <Alert onClose={handleClose} severity="info" sx={{ width: '100%' }}>
-            <div>We added {snackBarQueries.map((query) => `"${query}"`).join(', ')} to your profile!</div>
-            <Button size="small" color="error">Undo</Button>
+            <div>We added {snackBarQueries.map((query) => `"${query}"`).join(', ')} to the {profileLabel} in your profile!</div>
+            <Button size="small" color="error" onClick={removeFromProfile}>Undo</Button>
           </Alert>
         </Snackbar>
         <Grid container sx={{ paddingTop: paddingTop, paddingBottom: paddingBottom }}>
@@ -96,6 +119,7 @@ function DecoratedTextField({ paddingTop = '10px', paddingBottom = '8px', placeh
                         if (newQueries.length > 0) {
                           setQueries([...queries, ...newQueries])
                           setSnackbarQueries(newQueries)
+                          addToProfile(newQueries)
                         }
 
                         // Clear the search box
