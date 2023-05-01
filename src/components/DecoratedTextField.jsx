@@ -10,7 +10,7 @@ import { InputAdornment } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import { findQuery } from '../pages/SearchPage'
 
-function DecoratedTextField({ paddingTop = '10px', paddingBottom = '8px', placeholder, label, colorClass, currentQuery, setCurrentQuery, queries, setQueries, setDuplicateQueries, localStorageOuterKey, localStorageInnerKey, profileLabel }) {
+function DecoratedTextField({ paddingTop = '10px', paddingBottom = '8px', placeholder, label, colorClass, currentQuery, setCurrentQuery, queries, setQueries, setDuplicateQueries, localStorageKey, profileLabel }) {
     const theme = useTheme();
 
     const [snackBarQueries, setSnackbarQueries] = useState([])
@@ -27,24 +27,22 @@ function DecoratedTextField({ paddingTop = '10px', paddingBottom = '8px', placeh
 
     const addToProfile = (queries) => {
       let user = JSON.parse(localStorage.getItem('userData'))
-      console.log(user)
-      if (user[localStorageOuterKey] && user[localStorageOuterKey][localStorageInnerKey]) {
+      // console.log(user)
+      if (user[localStorageKey]) {
         queries.forEach((query) => {
-          if (findQuery(user[localStorageOuterKey][localStorageInnerKey], query) === undefined) {
-            user[localStorageOuterKey][localStorageInnerKey].push(query)
+          if (findQuery(user[localStorageKey], query) === undefined) {
+            user[localStorageKey].push(query)
           }
         })
       } else {
-        user[localStorageOuterKey] = {
-          [localStorageInnerKey]: queries
-        }
+        user[localStorageKey] = queries
       }
       localStorage.setItem('userData', JSON.stringify(user))
     }
 
     const removeFromProfile = () => {
       let user = JSON.parse(localStorage.getItem('userData'))
-      user[localStorageOuterKey][localStorageInnerKey] = user[localStorageOuterKey][localStorageInnerKey].filter((item) => !snackBarQueries.includes(item))
+      user[localStorageKey] = user[localStorageKey].filter((item) => !snackBarQueries.includes(item))
       localStorage.setItem('userData', JSON.stringify(user))
     }
     

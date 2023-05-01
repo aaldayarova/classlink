@@ -76,6 +76,21 @@ function ProfilePage() {
     });
   };
 
+  const handleUserListDataChange = (event) => {
+    const { name, value } = event.target;
+
+    let list = value.split(',')
+
+    setUserData((prevUserData) => ({
+      ...prevUserData,
+      [name]: list
+    }));
+    saveUserData({
+      ...userData,
+      [name]: list
+    });
+  };
+
   // Preserving user input in basic information section of the profile page
   useEffect(() => {
     const storedUserData = localStorage.getItem('userData');
@@ -206,7 +221,7 @@ function ProfilePage() {
                     <div style={{ margin: '10px' }}>
                       <TextField
                         name="skills"
-                        onChange={handleUserDataChange}
+                        onChange={handleUserListDataChange}
                         value={userData.skills}
                         fullWidth
                         id="outlined-multiline-static"
@@ -227,7 +242,7 @@ function ProfilePage() {
                     <div style={{ margin: '10px' }}>
                       <TextField
                         name="interests"
-                        onChange={handleUserDataChange}
+                        onChange={handleUserListDataChange}
                         value={userData.interests}
                         fullWidth
                         id="outlined-multiline-static"
@@ -301,7 +316,7 @@ function ProfilePage() {
                     <div style={{ margin: '10px' }}>
                       <TextField
                         name="subjects"
-                        onChange={handleUserDataChange}
+                        onChange={handleUserListDataChange}
                         value={userData.subjects}
                         fullWidth
                         id="outlined-multiline-static"
