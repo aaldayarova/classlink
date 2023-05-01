@@ -148,6 +148,7 @@ function ProfilePage() {
 
   return (
     <>
+    {/* CONCEPT: Profile, STATE: Incomplete */}
     <div style={{ margin: '100px' }}>
     <IconButton color="primary" component="label">
       <Link to='/' style={{ textDecoration: 'none' }}>
@@ -160,6 +161,7 @@ function ProfilePage() {
             <Avatar sx={{ height: 150, width: 150 }} />
           </Grid>
         </Grid>
+        {/* CONCEPT: Profile, STATE: Partially complete, ACTION: completeBasicInformation */}
         <Grid item xs={12} sm={8} md={9}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6} md={4}>
@@ -202,6 +204,7 @@ function ProfilePage() {
         </FormGroup>
       </div>
 
+      {/* CONCEPT: Profile, ACTION: completeCofounderPreferences */}
       <div style={{ marginTop: '20px'}}>
         <Grid container direction="row" justifyContent="space-between">
           <Grid item xs>
@@ -299,6 +302,8 @@ function ProfilePage() {
               </AccordionDetails>
             </Accordion>
           </Grid>
+          
+          {/* CONCEPT: Profile, ACTION: completeStudyBuddyPreferences */}
           <Grid item xs>
             <Accordion disabled={isAccordionDisabled2} expanded={expanded2 === 'panel2'} onChange={handleChange2('panel2')}>
               <AccordionSummary
@@ -381,6 +386,8 @@ function ProfilePage() {
       <div style={{ marginTop: '40px' }}>
         <Divider></Divider>
       </div>
+
+      {/* CONCEPT: Profile, STATE: Complete */}
 
       {/* <div style={{ marginTop: '40px'}}>
         <Button sx={{ 
