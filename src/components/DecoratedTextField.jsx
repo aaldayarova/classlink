@@ -27,7 +27,6 @@ function DecoratedTextField({ paddingTop = '10px', paddingBottom = '8px', placeh
 
     const addToProfile = (queries) => {
       let user = JSON.parse(localStorage.getItem('userData'))
-      // console.log(user)
       if (user[localStorageKey]) {
         queries.forEach((query) => {
           if (findQuery(user[localStorageKey], query) === undefined) {

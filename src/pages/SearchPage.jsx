@@ -72,7 +72,7 @@ function SearchPage() {
         <Grid container justifyContent="flex-end">
             <Grid item>
                 <Link to='/profile' style={{ textDecoration: 'none' }}>
-                    <Avatar alt="Your Profile">P</Avatar>
+                    <Avatar alt="Your Profile" src="/public/bitmoji.jpeg" sx={{ transform: 'scale(3)', transformOrigin: 'top left', position: 'relative', left: '-80px', top: '10px',  }}></Avatar>
                 </Link>
             </Grid>
         </Grid>
