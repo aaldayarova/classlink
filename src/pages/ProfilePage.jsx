@@ -18,6 +18,10 @@ import FormControl from '@mui/material/FormControl'
 import MenuItem from '@mui/material/MenuItem'
 import InputLabel from '@mui/material/InputLabel'
 import TextFieldCustom from '../components/TextFieldCustom'
+import IconButton from '@mui/material/IconButton'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import { Link } from 'react-router-dom'
+import InputAdornment from '@mui/material/InputAdornment'
 
 function ProfilePage() {
   const theme = useTheme();
@@ -28,9 +32,15 @@ function ProfilePage() {
   const [isAccordionDisabled1, setIsAccordionDisabled1] = useState(false);
   const [isAccordionDisabled2, setIsAccordionDisabled2] = useState(false);
 
-  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [cofounderCheckbox, setCofounderCheckbox] = useState(false);
+  const [studyBuddyCheckbox, setStudyBuddyCheckbox] = useState(false);
 
   const [userData, setUserData] = useState({});
+
+  const [launchStage, setLaunchStage] = useState('');
+  const [ideaStage, setIdeaStage] = useState('');
+  const [purpose, setPurpose] = useState('');
+  const [frequency, setFrequency] = useState('');
 
   const handleChange1 = (panel) => (event, isExpanded) => {
     setExpanded1(isExpanded ? panel : false);
@@ -42,15 +52,12 @@ function ProfilePage() {
 
   const handleCheckboxChange1 = (event) => {
     setIsAccordionDisabled1(event.target.checked)
+    setCofounderCheckbox(event.target.checked);
   };
 
   const handleCheckboxChange2 = (event) => {
     setIsAccordionDisabled2(event.target.checked)
-  };
-
-  const handleOptions = (event) => {
-    const { value } = event.target
-    setSelectedOptions(value)
+    setStudyBuddyCheckbox(event.target.checked);
   };
 
   const saveUserData = (userData) => {
@@ -69,6 +76,7 @@ function ProfilePage() {
     });
   };
 
+  // Preserving user input in basic information section of the profile page
   useEffect(() => {
     const storedUserData = localStorage.getItem('userData');
     if (storedUserData) {
@@ -76,13 +84,61 @@ function ProfilePage() {
     }
   }, []);
 
-  const handleConnectSpotify = () => {
-    // Handle Spotify connection logic here
-  };
+  // Preserving Checkbox selection
+  useEffect(() => {
+    const storedCofounderCheckbox = localStorage.getItem('cofounderCheckbox');
+    const storedStudyBuddyCheckbox = localStorage.getItem('studyBuddyCheckbox');
+
+    setCofounderCheckbox(storedCofounderCheckbox === 'true');
+    setStudyBuddyCheckbox(storedStudyBuddyCheckbox === 'true');
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('cofounderCheckbox', cofounderCheckbox);
+    localStorage.setItem('studyBuddyCheckbox', studyBuddyCheckbox);
+  }, [cofounderCheckbox, studyBuddyCheckbox]);
+
+  // Preserving user input in Select components inside Accordions
+  useEffect(() => {
+    const storedLaunchStage = localStorage.getItem('launchStage');
+    const storedIdeaStage = localStorage.getItem('ideaStage');
+    const storedPurpose = localStorage.getItem('purpose');
+    const storedFrequency = localStorage.getItem('frequency');
+
+    setLaunchStage(storedLaunchStage || '');
+    setIdeaStage(storedIdeaStage || '');
+    setPurpose(storedPurpose || '');
+    setFrequency(storedFrequency || '');
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('launchStage', launchStage);
+    localStorage.setItem('ideaStage', ideaStage);
+    localStorage.setItem('purpose', purpose);
+    localStorage.setItem('frequency', frequency);
+  }, [launchStage, ideaStage, purpose, frequency]);
+
+  // Preserving Accordion enabling/disabling according to Checkbox selection
+  useEffect(() => {
+    if (cofounderCheckbox) {
+      setIsAccordionDisabled1(false);
+    }
+  }, [cofounderCheckbox]);
+
+  useEffect(() => {
+    if (studyBuddyCheckbox) {
+      setIsAccordionDisabled2(false);
+    }
+  }, [studyBuddyCheckbox]);
 
   return (
     <>
     <div style={{ margin: '100px' }}>
+    <IconButton color="primary" component="label">
+      <Link to='/' style={{ textDecoration: 'none' }}>
+        <ArrowBackIcon />    
+      </Link>
+    </IconButton>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={4} md={3}>
           <Grid container justifyContent="center">
@@ -122,10 +178,10 @@ function ProfilePage() {
         <FormGroup style={{ flex: 1 }}>
           <Grid container direction="row" justifyContent="flex-start" alignItems="center" spacing={3}>
             <Grid item>
-              <FormControlLabel name="cofounderCheckbox" onChange={handleUserDataChange} value={userData.cofounderCheckbox} control={<Checkbox onChange={handleCheckboxChange1} />} label="Cofounders" />
+              <FormControlLabel name="cofounderCheckbox" onChange={handleCheckboxChange1} checked={cofounderCheckbox} control={<Checkbox />} label="Cofounders" />
             </Grid>
             <Grid item>
-              <FormControlLabel name="studyBuddyCheckbox" onChange={handleUserDataChange} value={userData.studyBuddyCheckbox} control={<Checkbox onChange={handleCheckboxChange2} />} label="Study buddies" />
+              <FormControlLabel name="studyBuddyCheckbox" onChange={handleCheckboxChange2} checked={studyBuddyCheckbox} control={<Checkbox />} label="Study buddies" />
             </Grid>
           </Grid>
         </FormGroup>
@@ -134,7 +190,7 @@ function ProfilePage() {
       <div style={{ marginTop: '20px'}}>
         <Grid container direction="row" justifyContent="space-between">
           <Grid item xs>
-            <Accordion expanded={expanded1 === 'panel1'} onChange={handleChange1('panel1')} disabled={!isAccordionDisabled1}>
+            <Accordion disabled={isAccordionDisabled1} expanded={expanded1 === 'panel1'} onChange={handleChange1('panel1')}>
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1bh-content"
@@ -158,7 +214,13 @@ function ProfilePage() {
                         multiline
                         rows={4}
                         placeholder="Coding, drawing, prototyping, ..."
-                      />
+                        InputProps={{
+                          startAdornment: (
+                              <InputAdornment position="start">
+                                  
+                              </InputAdornment>
+                          ),
+                        }} />
                     </div>
                   </Grid>
                   <Grid item xs={12} md={6}>
@@ -173,6 +235,13 @@ function ProfilePage() {
                         multiline
                         rows={4}
                         placeholder="Crypto, blockchain, Naruto, ..."
+                        InputProps={{
+                          startAdornment: (
+                              <InputAdornment position="start">
+                                  
+                              </InputAdornment>
+                          ),
+                        }} 
                       />
                     </div>
                   </Grid>
@@ -182,8 +251,8 @@ function ProfilePage() {
                     <InputLabel id="demo-simple-select-label">Launch stage </InputLabel>
                     <Select
                       name="launchStage"
-                      onChange={handleUserDataChange}
-                      value={userData.launchStage}
+                      onChange={(event) => setLaunchStage(event.target.value)}
+                      value={launchStage}
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
                       label="Launch stage"
@@ -200,8 +269,8 @@ function ProfilePage() {
                     <InputLabel id="demo-simple-select-label">Idea stage </InputLabel>
                     <Select
                       name="ideaStage"
-                      onChange={handleUserDataChange}
-                      value={userData.ideaStage}
+                      onChange={(event) => setIdeaStage(event.target.value)}
+                      value={ideaStage}
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
                       label="Idea stage"
@@ -216,7 +285,7 @@ function ProfilePage() {
             </Accordion>
           </Grid>
           <Grid item xs>
-            <Accordion expanded={expanded2 === 'panel2'} onChange={handleChange2('panel2')} disabled={!isAccordionDisabled2}>
+            <Accordion disabled={isAccordionDisabled2} expanded={expanded2 === 'panel2'} onChange={handleChange2('panel2')}>
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1bh-content"
@@ -240,6 +309,13 @@ function ProfilePage() {
                         multiline
                         rows={4}
                         placeholder="CS 178, Computer Networks, ..."
+                        InputProps={{
+                          startAdornment: (
+                              <InputAdornment position="start">
+                                  
+                              </InputAdornment>
+                          ),
+                        }} 
                       />
                     </div>
                   </Grid>
@@ -249,8 +325,8 @@ function ProfilePage() {
                     <InputLabel id="demo-simple-select-label">Purpose </InputLabel>
                     <Select
                       name="purpose"
-                      onChange={handleUserDataChange}
-                      value={userData.purpose}
+                      onChange={(event) => setPurpose(event.target.value)}
+                      value={purpose}
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
                       label="Purpose"
@@ -269,8 +345,8 @@ function ProfilePage() {
                     <InputLabel id="demo-simple-select-label">Frequency </InputLabel>
                     <Select
                       name="frequency"
-                      onChange={handleUserDataChange}
-                      value={userData.frequency}
+                      onChange={(event) => setFrequency(event.target.value)}
+                      value={frequency}
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
                       label="Frequency"
@@ -291,7 +367,7 @@ function ProfilePage() {
         <Divider></Divider>
       </div>
 
-      <div style={{ marginTop: '40px'}}>
+      {/* <div style={{ marginTop: '40px'}}>
         <Button sx={{ 
             backgroundColor: theme.palette.customColors.success.bg,
             borderRadius: theme.spacing(3),
@@ -299,11 +375,10 @@ function ProfilePage() {
             color: theme.palette.customColors.success.hover,
             fontFamily: theme.typography.fontFamily}}
             variant="contained"
-            onClick={handleConnectSpotify}
           >
           Connect your Spotify
           </Button>
-      </div>
+      </div> */}
     </div>
     </>
   )
