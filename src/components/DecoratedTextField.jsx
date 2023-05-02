@@ -15,8 +15,6 @@ function DecoratedTextField({ paddingTop = '10px', paddingBottom = '8px', placeh
 
     const [snackBarQueries, setSnackbarQueries] = useState([])
 
-    console.log('queries', queries)
-
     const handleClose = (_, reason) => {
       if (reason === 'clickaway') {
         return
@@ -27,14 +25,25 @@ function DecoratedTextField({ paddingTop = '10px', paddingBottom = '8px', placeh
 
     const addToProfile = (queries) => {
       let user = JSON.parse(localStorage.getItem('userData'))
-      if (user[localStorageKey]) {
+      if (user && user[localStorageKey]) {
+        let newQueries = user[localStorageKey]
+        if (user[localStorageKey][0] === '') {
+          newQueries = []
+        }
         queries.forEach((query) => {
           if (findQuery(user[localStorageKey], query) === undefined) {
-            user[localStorageKey].push(query)
+            newQueries.push(query)
           }
         })
-      } else {
+        user[localStorageKey] = newQueries
+      } else if (user && user[localStorageKey]) {
+
+      } else if (user) {
         user[localStorageKey] = queries
+      } else {
+        user = {
+          [localStorageKey]: queries
+        }
       }
       localStorage.setItem('userData', JSON.stringify(user))
     }
