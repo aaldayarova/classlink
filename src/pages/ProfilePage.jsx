@@ -51,13 +51,11 @@ function ProfilePage() {
   };
 
   const handleCheckboxChange1 = (event) => {
-    setIsAccordionDisabled1(event.target.checked)
-    setCofounderCheckbox(event.target.checked);
+    setCofounderCheckbox(event.target.checked)
   };
 
   const handleCheckboxChange2 = (event) => {
-    setIsAccordionDisabled2(event.target.checked)
-    setStudyBuddyCheckbox(event.target.checked);
+    setStudyBuddyCheckbox(event.target.checked)
   };
 
   const saveUserData = (userData) => {
@@ -135,15 +133,11 @@ function ProfilePage() {
 
   // Preserving Accordion enabling/disabling according to Checkbox selection
   useEffect(() => {
-    if (cofounderCheckbox) {
-      setIsAccordionDisabled1(false);
-    }
+    setIsAccordionDisabled1(!cofounderCheckbox)
   }, [cofounderCheckbox]);
 
   useEffect(() => {
-    if (studyBuddyCheckbox) {
-      setIsAccordionDisabled2(false);
-    }
+    setIsAccordionDisabled2(!studyBuddyCheckbox)
   }, [studyBuddyCheckbox]);
 
   return (
@@ -158,7 +152,12 @@ function ProfilePage() {
       <Grid container spacing={2}>
         <Grid item xs={12} sm={4} md={3}>
           <Grid container justifyContent="center">
-            <Avatar sx={{ height: 150, width: 150 }} />
+            <Avatar src="/bitmoji-cropped.jpeg" sx={{ 
+              height: 150, 
+              width: 150,
+              border: '1px solid black',
+              borderRadius: '50%',
+              boxShadow: '0 0 5px rgba(0, 0, 0, 0.3)', }} />
           </Grid>
         </Grid>
         {/* CONCEPT: Profile, STATE: Partially complete, ACTION: completeBasicInformation */}
@@ -302,7 +301,7 @@ function ProfilePage() {
               </AccordionDetails>
             </Accordion>
           </Grid>
-          
+
           {/* CONCEPT: Profile, ACTION: completeStudyBuddyPreferences */}
           <Grid item xs>
             <Accordion disabled={isAccordionDisabled2} expanded={expanded2 === 'panel2'} onChange={handleChange2('panel2')}>

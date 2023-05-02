@@ -68,11 +68,19 @@ function SearchPage() {
 
     return (
         <>
-        {/* TODO: Add profile photo */}
         <Grid container justifyContent="flex-end">
             <Grid item>
                 <Link to='/profile' style={{ textDecoration: 'none' }}>
-                    <Avatar alt="Your Profile" src="/public/bitmoji.jpeg" sx={{ transform: 'scale(3)', transformOrigin: 'top left', position: 'relative', left: '-80px', top: '10px',  }}></Avatar>
+                    <Avatar alt="Your Profile" src="/public/bitmoji-cropped.jpeg" sx={{
+                        transform: 'scale(3)', 
+                        transformOrigin: 'top left', 
+                        position: 'relative', 
+                        left: '-80px', 
+                        top: '10px', 
+                        border: '.5px solid black',
+                        borderRadius: '50%',
+                        boxShadow: '0 0 5px rgba(0, 0, 0, 0.3)',  }}>
+                    </Avatar>
                 </Link>
             </Grid>
         </Grid>
