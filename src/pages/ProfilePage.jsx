@@ -194,10 +194,10 @@ function ProfilePage() {
         <FormGroup style={{ flex: 1 }}>
           <Grid container direction="row" justifyContent="flex-start" alignItems="center" spacing={3}>
             <Grid item>
-              <FormControlLabel name="cofounderCheckbox" onChange={handleCheckboxChange1} checked={cofounderCheckbox} control={<Checkbox />} label="Cofounders" />
+              <FormControlLabel name="studyBuddyCheckbox" onChange={handleCheckboxChange2} checked={studyBuddyCheckbox} control={<Checkbox />} label="Study buddies" />
             </Grid>
             <Grid item>
-              <FormControlLabel name="studyBuddyCheckbox" onChange={handleCheckboxChange2} checked={studyBuddyCheckbox} control={<Checkbox />} label="Study buddies" />
+              <FormControlLabel name="cofounderCheckbox" onChange={handleCheckboxChange1} checked={cofounderCheckbox} control={<Checkbox />} label="Cofounders" />
             </Grid>
           </Grid>
         </FormGroup>
@@ -206,102 +206,6 @@ function ProfilePage() {
       {/* CONCEPT: Profile, ACTION: completeCofounderPreferences */}
       <div style={{ marginTop: '20px'}}>
         <Grid container direction="row" justifyContent="space-between">
-          <Grid item xs>
-            <Accordion disabled={isAccordionDisabled1} expanded={expanded1 === 'panel1'} onChange={handleChange1('panel1')}>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1bh-content"
-                id="panel1bh-header"
-              >
-                <Typography sx={{ width: '33%', flexShrink: 0 }}>
-                  Cofounder preferences
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Grid container direction="row" spacing={2}>
-                  <Grid item xs={12} md={6}>
-                    <div style={{ margin: '10px' }}>
-                      <TextField
-                        name="skills"
-                        onChange={handleUserListDataChange}
-                        value={userData.skills}
-                        fullWidth
-                        id="outlined-multiline-static"
-                        label="Skills"
-                        multiline
-                        rows={4}
-                        placeholder="Coding, drawing, prototyping, ..."
-                        InputProps={{
-                          startAdornment: (
-                              <InputAdornment position="start">
-                                  
-                              </InputAdornment>
-                          ),
-                        }} />
-                    </div>
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <div style={{ margin: '10px' }}>
-                      <TextField
-                        name="interests"
-                        onChange={handleUserListDataChange}
-                        value={userData.interests}
-                        fullWidth
-                        id="outlined-multiline-static"
-                        label="Interests"
-                        multiline
-                        rows={4}
-                        placeholder="Crypto, blockchain, Naruto, ..."
-                        InputProps={{
-                          startAdornment: (
-                              <InputAdornment position="start">
-                                  
-                              </InputAdornment>
-                          ),
-                        }} 
-                      />
-                    </div>
-                  </Grid>
-                </Grid>
-                <div style={{ margin: '10px'}}> 
-                  <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">Launch stage </InputLabel>
-                    <Select
-                      name="launchStage"
-                      onChange={(event) => setLaunchStage(event.target.value)}
-                      value={launchStage}
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      label="Launch stage"
-                    >
-                      <MenuItem value={'ASAP'}>ASAP</MenuItem>
-                      <MenuItem value={'Soon'}>In the next few months</MenuItem>
-                      <MenuItem value={'Later'}>In the next year</MenuItem>
-                      <MenuItem value={'Not soon'}>In the next few years</MenuItem>
-                    </Select>
-                  </FormControl>
-                </div>
-                <div style={{ margin: '10px'}}>
-                  <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">Idea stage </InputLabel>
-                    <Select
-                      name="ideaStage"
-                      onChange={(event) => setIdeaStage(event.target.value)}
-                      value={ideaStage}
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      label="Idea stage"
-                    >
-                      <MenuItem value={'Working'}>Working on an idea</MenuItem>
-                      <MenuItem value={'No idea'}>Don't have an idea yet</MenuItem>
-                      <MenuItem value={'Joining'}>Want to join someone with an idea</MenuItem>
-                    </Select>
-                  </FormControl>
-                </div>
-              </AccordionDetails>
-            </Accordion>
-          </Grid>
-
           {/* CONCEPT: Profile, ACTION: completeStudyBuddyPreferences */}
           <Grid item xs>
             <Accordion disabled={isAccordionDisabled2} expanded={expanded2 === 'panel2'} onChange={handleChange2('panel2')}>
@@ -373,6 +277,102 @@ function ProfilePage() {
                       <MenuItem value={'Daily'}>Daily</MenuItem>
                       <MenuItem value={'Weekly'}>Weekly</MenuItem>
                       <MenuItem value={'Monthly'}>Monthly</MenuItem>
+                    </Select>
+                  </FormControl>
+                </div>
+              </AccordionDetails>
+            </Accordion>
+          </Grid>
+
+          <Grid item xs>
+            <Accordion disabled={isAccordionDisabled1} expanded={expanded1 === 'panel1'} onChange={handleChange1('panel1')}>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1bh-content"
+                id="panel1bh-header"
+              >
+                <Typography sx={{ width: '33%', flexShrink: 0 }}>
+                  Cofounder preferences
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Grid container direction="row" spacing={2}>
+                  <Grid item xs={12} md={6}>
+                    <div style={{ margin: '10px' }}>
+                      <TextField
+                        name="interests"
+                        onChange={handleUserListDataChange}
+                        value={userData.interests}
+                        fullWidth
+                        id="outlined-multiline-static"
+                        label="Interests"
+                        multiline
+                        rows={4}
+                        placeholder="Crypto, blockchain, Naruto, ..."
+                        InputProps={{
+                          startAdornment: (
+                              <InputAdornment position="start">
+                                  
+                              </InputAdornment>
+                          ),
+                        }} 
+                      />
+                    </div>
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <div style={{ margin: '10px' }}>
+                      <TextField
+                        name="skills"
+                        onChange={handleUserListDataChange}
+                        value={userData.skills}
+                        fullWidth
+                        id="outlined-multiline-static"
+                        label="Skills"
+                        multiline
+                        rows={4}
+                        placeholder="Coding, drawing, prototyping, ..."
+                        InputProps={{
+                          startAdornment: (
+                              <InputAdornment position="start">
+                                  
+                              </InputAdornment>
+                          ),
+                        }} />
+                    </div>
+                  </Grid>
+                </Grid>
+                <div style={{ margin: '10px'}}> 
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">Launch stage </InputLabel>
+                    <Select
+                      name="launchStage"
+                      onChange={(event) => setLaunchStage(event.target.value)}
+                      value={launchStage}
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      label="Launch stage"
+                    >
+                      <MenuItem value={'ASAP'}>ASAP</MenuItem>
+                      <MenuItem value={'Soon'}>In the next few months</MenuItem>
+                      <MenuItem value={'Later'}>In the next year</MenuItem>
+                      <MenuItem value={'Not soon'}>In the next few years</MenuItem>
+                    </Select>
+                  </FormControl>
+                </div>
+                <div style={{ margin: '10px'}}>
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">Idea stage </InputLabel>
+                    <Select
+                      name="ideaStage"
+                      onChange={(event) => setIdeaStage(event.target.value)}
+                      value={ideaStage}
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      label="Idea stage"
+                    >
+                      <MenuItem value={'Working'}>Working on an idea</MenuItem>
+                      <MenuItem value={'No idea'}>Don't have an idea yet</MenuItem>
+                      <MenuItem value={'Joining'}>Want to join someone with an idea</MenuItem>
                     </Select>
                   </FormControl>
                 </div>
